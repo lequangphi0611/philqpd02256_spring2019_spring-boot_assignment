@@ -1,0 +1,85 @@
+package com.quangphi.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+public class Records implements Serializable {
+
+    private int idRecords;
+    private boolean type;
+    private String reason;
+    private Date date;
+
+    private Staffs staffs;
+
+    {
+        date = new Date();
+    }
+
+    public Records(){}
+
+    public Records(int idRecords, boolean type, String reason, Date date) {
+        this.idRecords = idRecords;
+        this.type = type;
+        this.reason = reason;
+        this.date = date;
+    }
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    public int getIdRecords() {
+        return this.idRecords;
+    }
+
+    public void setIdRecords(int idRecords) {
+        this.idRecords = idRecords;
+    }
+
+    @Column
+    public boolean isType() {
+        return this.type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
+    }
+
+    @Column(columnDefinition="TEXT")
+    public String getReason() {
+        return this.reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDate() {
+        return this.date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="idStaff")
+    public Staffs getStaffs() {
+        return this.staffs;
+    }
+
+    public void setStaffs(Staffs staffs) {
+        this.staffs = staffs;
+    }
+}

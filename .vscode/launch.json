@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<Philqpd02256_Staffs_Management>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.quangphi.Application",
+            "projectName": "Philqpd02256_Staffs_Management",
+            "args": ""
+        }
+    ]
+}
