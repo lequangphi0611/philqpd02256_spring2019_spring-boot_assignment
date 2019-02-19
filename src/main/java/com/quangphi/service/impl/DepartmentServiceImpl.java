@@ -1,5 +1,6 @@
 package com.quangphi.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.quangphi.entity.Department;
@@ -20,27 +21,46 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentRepository.existsById(departmentDTO.getIdDepartment())) {
             throw new ExistsException("Error : " + Department.class.getName() + " width idDepartment = \""
                     + departmentDTO.getIdDepartment() + "\" already exists ! ");
-        }
-        if (departmentRepository.existsByDepartmentName(departmentDTO.getDepartmentName())) {
+        } else if (departmentRepository.existsByDepartmentName(departmentDTO.getDepartmentName())) {
             throw new ExistsException("Error : " + Department.class.getName() + " width departmentName = \""
                     + departmentDTO.getDepartmentName() + "\" already exists ! ");
         }
-        return null;
+        departmentRepository.save(departmentDTO.toDepartment());
+        return departmentDTO;
     }
 
     @Override
     public DepartmentDTO updateDepartment(DepartmentDTO departmentDTO) {
-        return null;
+        if (!departmentRepository.existsById(departmentDTO.getIdDepartment())) {
+            throw new ExistsException("Error : " + Department.class.getName() + " width idDepartment = \""
+                    + departmentDTO.getIdDepartment() + "\" does not exists ! ");
+
+        } else if (departmentRepository.existsByDepartmentName(departmentDTO.getDepartmentName())) {
+            Department department = departmentRepository.findById(departmentDTO.getIdDepartment()).get();
+            if (!department.getDepartmentName().equals(departmentDTO.getDepartmentName())) {
+                throw new ExistsException("Error : " + Department.class.getName() + " width departmentName = \""
+                        + departmentDTO.getDepartmentName() + "\" already exists ! ");
+            }
+        }
+        departmentRepository.save(departmentDTO.toDepartment());
+        return departmentDTO;
+    }
+
+    public List<DepartmentDTO> getDepartmentDTOs(Iterable<Department> iterable){
+        List<DepartmentDTO> allDepartmentDTOs = new ArrayList<>();
+        iterable.forEach((items) -> allDepartmentDTOs.add(DepartmentDTO.parseDepartmentDTO(items)));
+        return allDepartmentDTOs;
     }
 
     @Override
     public List<DepartmentDTO> getAllDepartments() {
-        return null;
+        return getDepartmentDTOs(departmentRepository.findAll());
     }
 
     @Override
     public boolean delete(String idDepartment) {
-        return false;
+        departmentRepository.deleteById(idDepartment);
+        return true;
     }
 
 }
