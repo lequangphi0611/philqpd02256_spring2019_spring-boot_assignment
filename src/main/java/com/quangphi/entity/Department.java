@@ -10,11 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Department implements Serializable {
 
+	private static final long serialVersionUID = 8463305366385972536L;
+	
 	private String idDepartment;
 	private String departmentName;
 
@@ -37,8 +38,7 @@ public class Department implements Serializable {
 		this.idDepartment = idDepartment;
 	}
 
-	@NotNull
-	@Column(columnDefinition = "NVARCHAR(50)", unique = true)
+	@Column(columnDefinition = "NVARCHAR(50)", unique = true,nullable=false)
 	public String getDepartmentName() {
 		return departmentName;
 	}

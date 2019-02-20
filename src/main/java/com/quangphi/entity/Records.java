@@ -16,7 +16,9 @@ import javax.persistence.TemporalType;
 @Entity
 public class Records implements Serializable {
 
-    private int idRecords;
+	private static final long serialVersionUID = 4114525093536706913L;
+	
+	private int idRecords;
     private boolean type;
     private String reason;
     private Date date;

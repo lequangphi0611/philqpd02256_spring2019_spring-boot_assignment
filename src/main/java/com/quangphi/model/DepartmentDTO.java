@@ -38,4 +38,9 @@ public class DepartmentDTO {
         return new Department(idDepartment, departmentName);
     }
     
+    @Override
+    public String toString() {
+    	return this.departmentName;
+    }
+    
 }

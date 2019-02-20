@@ -5,13 +5,14 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 public class Account implements Serializable {
 
-    private String username;
+	private static final long serialVersionUID = 1309273091702458137L;
+	
+	private String username;
     private String password;
     private String fullname;
 
@@ -24,8 +25,7 @@ public class Account implements Serializable {
     }
 
     @Id
-    @Column(length=20)
-    @NotNull
+    @Column(length=20,nullable=false)
     public String getUsername() {
         return this.username;
     }
@@ -34,8 +34,7 @@ public class Account implements Serializable {
         this.username = username;
     }
 
-    @NotNull
-    @Column(length=16)
+    @Column(length=16,nullable=false)
     @Size(min = 3)
     public String getPassword() {
         return this.password;
@@ -45,8 +44,7 @@ public class Account implements Serializable {
         this.password = password;
     }
 
-    @NotNull
-    @Column(length=30)
+    @Column(length=30,nullable=false)
     public String getFullname() {
         return this.fullname;
     }

@@ -18,7 +18,9 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class Staffs implements Serializable {
 
-    private String idStaffs;
+	private static final long serialVersionUID = 7641864034440537062L;
+	
+	private String idStaffs;
     private String StaffName;
     private boolean gender;
     private String photo;
@@ -55,7 +57,7 @@ public class Staffs implements Serializable {
         this.idStaffs = idStaffs;
     }
 
-    @Column(columnDefinition="NVARCHAR(50)")
+    @Column(columnDefinition="NVARCHAR(50)",nullable=false)
     public String getStaffName() {
         return StaffName;
     }
@@ -115,7 +117,7 @@ public class Staffs implements Serializable {
         this.notes = notes;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="idDepartment")
     public Department getDepartment() {
         return department;

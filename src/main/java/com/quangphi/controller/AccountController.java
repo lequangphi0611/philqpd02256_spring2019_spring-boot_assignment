@@ -33,26 +33,36 @@ public class AccountController {
 		return AccountController.ACCOUNT_MANAGEMENT_PATH;
 	}
 
+	@GetMapping("/action")
+	public String getHome() {
+		return "redirect:/account/home";
+	}
+
 	@PostMapping("/action")
 	public String addAccount(ModelMap model, @Valid AccountDTO accountDTO, BindingResult bindingResult,
 			@RequestParam String action) {
+		
+		boolean isAdd = action.equals("Add");
+		
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("status", action.equals("Add"));
+			model.addAttribute("status", isAdd);
 			model.addAttribute("accountDTO", accountDTO);
 			model.addAttribute("allAccounts", accountService.getAllAccounts());
 			return AccountController.ACCOUNT_MANAGEMENT_PATH;
 		}
-		if(action.equals("Add")) {
+		
+		if(isAdd) {
 			return addAccount(accountDTO, model);
-		}else {
-			return editAccount(accountDTO, model);
 		}
+		return editAccount(accountDTO, model);
 	}
 
 	public String addAccount(AccountDTO accountDTO, ModelMap model) {
 		try {
 			accountService.addAccount(accountDTO);
 			model.addAttribute("accountDTO", new AccountDTO());
+			model.addAttribute("success", true);
+			model.addAttribute("message", "Thêm tài khoản "+"\""+accountDTO.getUsername()+"\" thành công");
 		} catch (ExistsException e) {
 			model.addAttribute("username_error", "Tên đăng nhập đã tồn tại !");
 			model.addAttribute("accountDTO", accountDTO);
@@ -64,7 +74,9 @@ public class AccountController {
 
 	public String editAccount(AccountDTO accountDTO, ModelMap model) {
 		accountService.updateAccount(accountDTO);
-		return "redirect:/account/home";
+		model.addAttribute("success", true);
+		model.addAttribute("message", "Tài khoản đã được sửa");
+		return home(model);
 	}
 
 	@GetMapping("/delete/{username}")
