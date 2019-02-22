@@ -24,7 +24,7 @@ public class Staffs implements Serializable {
 	private static final long serialVersionUID = 7641864034440537062L;
 	
 	private String idStaffs;
-    private String StaffName;
+    private String staffsName;
     private Date birthDay;
     private boolean gender;
     private String photo;
@@ -39,10 +39,10 @@ public class Staffs implements Serializable {
     public Staffs() {
     }
 
-    public Staffs(String idStaffs, String StaffName,Date birthDay , boolean gender, String photo, String email, String phone,
+    public Staffs(String idStaffs, String staffsName,Date birthDay , boolean gender, String photo, String email, String phone,
             Long salary, String notes) {
         this.idStaffs = idStaffs;
-        this.StaffName = StaffName;
+        this.staffsName = staffsName;
         this.birthDay = birthDay;
         this.gender = gender;
         this.photo = photo;
@@ -63,12 +63,12 @@ public class Staffs implements Serializable {
     }
 
     @Column(columnDefinition="NVARCHAR(50)",nullable=false)
-    public String getStaffName() {
-        return StaffName;
+    public String getStaffsName() {
+        return staffsName;
     }
 
-    public void setStaffName(String staffName) {
-        StaffName = staffName;
+    public void setStaffsName(String staffsName) {
+        this.staffsName = staffsName;
     }
     
     @Temporal(TemporalType.DATE)
@@ -149,5 +149,14 @@ public class Staffs implements Serializable {
     public void setRecords(List<Records> records) {
         this.records = records;
     }
+
+	@Override
+	public String toString() {
+		return "Staffs [idStaffs=" + idStaffs + ", staffsName=" + staffsName + ", birthDay=" + birthDay + ", gender="
+				+ gender + ", photo=" + photo + ", email=" + email + ", phone=" + phone + ", salary=" + salary
+				+ ", notes=" + notes + ", department=" + department + ", records=" + records + "]";
+	}
+    
+    
 
 }

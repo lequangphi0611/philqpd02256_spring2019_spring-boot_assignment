@@ -4,7 +4,7 @@
 <body>
 	<section th:fragment="staffs-data">
 		<div class="mt-4">
-			<table class="table table-sm table-bordered">
+			<table class="table table-sm table-bordered table-responsive-sm">
 				<thead>
 					<tr>
 						<th>Mã nhân viên</th>
@@ -16,9 +16,23 @@
 						<th>Lương</th>
 						<th>Chú thích</th>
 						<th>Phòng ban</th>
+						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
+					<tr th:if="${allStaffs.size() == 0}">
+						<td colspan="11">
+							<div class="text-center">
+								<i class="fas fa-times-circle text-danger"></i>
+								<th:block th:if="${search_key == null}">
+									không có nhân viên nào
+									<a class="btn btn-link mb-sm-1" href="#">Thêm nhân viên</a>
+								</th:block>
+								<th:block th:if="${search_key != null}">Không tìm thấy nhân viên</th:block>
+							</div>
+						</td>
+					</tr>
 					<tr th:each="staffs : ${allStaffs}">
 						<td th:text="${staffs.idStaffs}"></td>
 						<td th:text="${staffs.staffsName}"></td>
@@ -32,6 +46,12 @@
 						<td th:text="${staffs.getSalaryCurrency()}"></td>
 						<td th:text="${staffs.notes}"></td>
 						<td th:text="${staffs.department}"></td>
+						<td class="text-center">
+							<a href="#" class="btn btn-warning "><i class="fas fa-edit"></i></a>	
+						</td>
+						<td class="text-center">
+							<a th:href="${uriDelStaffs} + ${staffs.idStaffs}" class="btn btn-danger "><i class="fas fa-trash-alt"></i></a>
+						</td>
 					</tr>
 				</tbody>
 			</table>

@@ -25,7 +25,7 @@ public class StaffsDTO {
     public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
     	StaffsDTO staffsDTO = new StaffsDTO();
     	staffsDTO.setIdStaffs(staffsEntity.getIdStaffs());
-    	staffsDTO.setStaffsName(staffsEntity.getStaffName());
+    	staffsDTO.setStaffsName(staffsEntity.getStaffsName());
     	staffsDTO.setBirthday(staffsEntity.getBirthDay());
     	staffsDTO.setGender(staffsEntity.isGender() ? Gender.MALE : Gender.FEMALE);
     	staffsDTO.setPhoto(staffsEntity.getPhoto());
@@ -139,7 +139,7 @@ public class StaffsDTO {
 	public Staffs toStaffsEntity() {
 		Staffs staffEntity = new Staffs();
 		staffEntity.setIdStaffs(this.idStaffs);
-		staffEntity.setStaffName(this.staffsName);
+		staffEntity.setStaffsName(this.staffsName);
 		staffEntity.setBirthDay(this.birthday);
 		staffEntity.setGender(this.gender == Gender.MALE);
 		staffEntity.setPhoto(this.photo);
@@ -156,4 +156,5 @@ public class StaffsDTO {
 		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
 		return numberFormat.format(this.salary);
 	}
+	
 }

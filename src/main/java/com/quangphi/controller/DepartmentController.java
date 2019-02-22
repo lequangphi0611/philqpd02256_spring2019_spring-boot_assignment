@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.ModelAndViewMethodReturnValueHandler;
 
 import com.quangphi.exception.DepartmentNameExistsException;
 import com.quangphi.exception.ExistsException;
@@ -54,12 +56,11 @@ public class DepartmentController {
 	}
 
 	@PostMapping("/add")
-	public String add(@ModelAttribute @Valid DepartmentDTO department, BindingResult bindingResult, ModelMap model) {
+	public String add(@ModelAttribute("department") @Valid DepartmentDTO department, BindingResult bindingResult,
+			ModelMap model) {
 		try {
 			if (bindingResult.hasErrors()) {
-				model.addAttribute("department", department);
-				model.addAttribute("allDepartments", getAllsDepartment());
-				return "department/department-management";
+				throw new Exception();
 			}
 			departmentService.addDepartment(department);
 			return "redirect:/department";
@@ -84,6 +85,7 @@ public class DepartmentController {
 	public String infor(@PathVariable String idDepartment, ModelMap model) {
 		model.addAttribute("department", departmentService.getById(idDepartment));
 		model.addAttribute("allStaffs", staffsService.getAllStaffsByIdDepartment(idDepartment));
+		model.addAttribute("uriDelStaffs", "/staffs/delete/department/" + idDepartment + "/");
 		return "department/department-infor";
 	}
 
@@ -93,19 +95,34 @@ public class DepartmentController {
 	}
 
 	@PostMapping("/edit/{idDepartment}")
-	public String edit(@ModelAttribute @Valid DepartmentDTO department,BindingResult bindingResult, 
+	public String edit(@ModelAttribute("department") @Valid DepartmentDTO department, BindingResult bindingResult,
 			@PathVariable String idDepartment, ModelMap model) {
+		String message = null;
 		try {
-			if(bindingResult.hasErrors()) {
-				return infor(idDepartment, model);
+			if (bindingResult.hasErrors()) {
+				message = "Không được để trống !";
+			} else {
+				department.setIdDepartment(idDepartment);
+				departmentService.updateDepartment(department);
+				return "redirect:/department/infor/" + idDepartment;
 			}
-			department.setIdDepartment(idDepartment);
-			departmentService.updateDepartment(department);
-			return "redirect:/department/infor/" + idDepartment;
 		} catch (DepartmentNameExistsException e) {
-			model.addAttribute("nameExists", "Tên phòng ban đã tồn tại !");
-			return infor(idDepartment, model);
+			message = "Tên phòng ban đã tồn tại !";
 		}
+		model.addAttribute("nameError", message);
+		return infor(idDepartment, model);
+	}
+
+	@GetMapping("/find/staffs/{idDepartment}")
+	public String findStaffs(@PathVariable String idDepartment, @RequestParam(required = false) String keyword,
+			ModelMap model) {
+		if (keyword == null || keyword.isEmpty()) {
+			return "redirect:/department/infor/" + idDepartment;
+		}
+		model.addAttribute("department", departmentService.getById(idDepartment));
+		model.addAttribute("allStaffs", staffsService.findStaffsByKeywordAndIdDepartment(idDepartment, keyword));
+		model.addAttribute("search_key", keyword);
+		return "department/department-infor";
 	}
 
 	class DepartmentDisplay {

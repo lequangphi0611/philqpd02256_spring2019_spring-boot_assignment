@@ -8,9 +8,13 @@ import com.quangphi.entity.Staffs;
 
 @Repository
 public interface StaffsRepository extends CrudRepository<Staffs, String> {
-	
+
 	public long countStaffsByDepartment(Department department);
-	
+
 	Iterable<Staffs> findAllStaffsByDepartment(Department department);
-	
+
+	Iterable<Staffs> findAllStaffsByDepartmentAndIdStaffsContaining(Department department, String idStaffs);
+
+	Iterable<Staffs> findAllStaffsByDepartmentAndStaffsNameContaining(Department department, String staffsName);
+
 }

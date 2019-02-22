@@ -57,7 +57,7 @@ public class StaffsServiceImpl implements StaffsService {
 
 	@Override
 	public boolean delete(String idStaffs) {
-		if(staffsRepository.existsById(idStaffs)) {
+		if(!staffsRepository.existsById(idStaffs)) {
 			return false;
 		}
 		staffsRepository.deleteById(idStaffs);
@@ -72,6 +72,35 @@ public class StaffsServiceImpl implements StaffsService {
 	@Override
 	public Iterable<StaffsDTO> getAllStaffsByIdDepartment(String idDepartment) {
 		return GetStaffsDTOTo(staffsRepository.findAllStaffsByDepartment(new Department(idDepartment, null)));
+	}
+	
+	@Override
+	public Iterable<StaffsDTO> findStaffsByKeywordAndIdDepartment(String idDepartment, String keyword) {
+		Department department = new Department(idDepartment, null);
+		List<StaffsDTO> result = 
+				(List<StaffsDTO>) GetStaffsDTOTo(staffsRepository
+						.findAllStaffsByDepartmentAndIdStaffsContaining(department, keyword));
+		List<StaffsDTO> tempStaffsDTO = (List<StaffsDTO>) GetStaffsDTOTo( staffsRepository
+				.findAllStaffsByDepartmentAndStaffsNameContaining(department, keyword));
+		if(!tempStaffsDTO.isEmpty()) {
+			tempStaffsDTO.forEach(
+					(itemsStaffs) -> {
+						if(!existsStaffsIn(itemsStaffs, result)) {
+							result.add(itemsStaffs);
+						}
+					}
+			);
+		}
+		return result;
+	}
+	
+	boolean existsStaffsIn(StaffsDTO staffsDTO,Iterable<StaffsDTO> allIStaffsDTO) {
+		for(StaffsDTO items : allIStaffsDTO) {
+			if(items.getIdStaffs().equals(staffsDTO.getIdStaffs())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
