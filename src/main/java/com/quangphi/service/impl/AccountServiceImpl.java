@@ -27,7 +27,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDTO addAccount(AccountDTO account) {
         if (accountRepository.existsById(account.getUsername())) {
-            throw new ExistsException("Error : " + Account.class.getSimpleName() + " width Username = \""
+            throw new ExistsException("Error : " + Account.class.getName() + " width Username = \""
                     + account.getUsername() + "\" already exists ! ");
         }
         accountRepository.save(account.toAccount());
@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDTO updateAccount(AccountDTO accountDTO) {
         if (!accountRepository.existsById(accountDTO.getUsername())) {
-            throw new ExistsException("Error : " + Account.class.getSimpleName() + " width Username = \""
+            throw new ExistsException("Error : " + Account.class.getName() + " width Username = \""
                     + accountDTO.getUsername() + "\" does not exists ! ");
         }
         accountRepository.save(accountDTO.toAccount());

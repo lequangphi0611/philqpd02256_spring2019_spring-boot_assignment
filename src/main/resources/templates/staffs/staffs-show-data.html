@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: head"></head>
+<body>
+	<section th:fragment="staffs-data">
+		<div class="mt-4">
+			<table class="table table-sm table-bordered">
+				<thead>
+					<tr>
+						<th>Mã nhân viên</th>
+						<th>Tên nhân viên</th>
+						<th>Ngày sinh</th>
+						<th>Giới tính</th>
+						<th>Email</th>
+						<th>Số điện thoại</th>
+						<th>Lương</th>
+						<th>Chú thích</th>
+						<th>Phòng ban</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="staffs : ${allStaffs}">
+						<td th:text="${staffs.idStaffs}"></td>
+						<td th:text="${staffs.staffsName}"></td>
+						<td th:text="${#dates.format(staffs.birthday,'dd/MM/yyyy')}"></td>
+						<th:block th:switch="${staffs.gender.toString()}">
+							<td th:case="'MALE'">Nam</td>
+							<td th:case="'FEMALE'">Nữ</td>
+						</th:block>
+						<td th:text="${staffs.email}"></td>
+						<td th:text="${staffs.phone}"></td>
+						<td th:text="${staffs.getSalaryCurrency()}"></td>
+						<td th:text="${staffs.notes}"></td>
+						<td th:text="${staffs.department}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
+	<th:block th:replace="common/scriptsource :: script"></th:block>
+</body>
+</html>

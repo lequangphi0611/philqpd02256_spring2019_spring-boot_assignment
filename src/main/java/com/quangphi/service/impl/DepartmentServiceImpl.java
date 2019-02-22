@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.quangphi.entity.Department;
+import com.quangphi.exception.DepartmentNameExistsException;
 import com.quangphi.exception.ExistsException;
 import com.quangphi.model.DepartmentDTO;
 import com.quangphi.repository.DepartmentRepository;
@@ -19,12 +20,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
     @Override
-    public DepartmentDTO addDepartment(DepartmentDTO departmentDTO) {
+    public DepartmentDTO addDepartment(DepartmentDTO departmentDTO) throws ExistsException,DepartmentNameExistsException {
         if (departmentRepository.existsById(departmentDTO.getIdDepartment())) {
             throw new ExistsException("Error : " + Department.class.getName() + " width idDepartment = \""
                     + departmentDTO.getIdDepartment() + "\" already exists ! ");
         } else if (departmentRepository.existsByDepartmentName(departmentDTO.getDepartmentName())) {
-            throw new ExistsException("Error : " + Department.class.getName() + " width departmentName = \""
+            throw new DepartmentNameExistsException("Error : " + Department.class.getName() + " width departmentName = \""
                     + departmentDTO.getDepartmentName() + "\" already exists ! ");
         }
         departmentRepository.save(departmentDTO.toDepartment());
@@ -32,17 +33,18 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDTO updateDepartment(DepartmentDTO departmentDTO) {
+    public DepartmentDTO updateDepartment(DepartmentDTO departmentDTO) throws ExistsException,DepartmentNameExistsException {
         if (!departmentRepository.existsById(departmentDTO.getIdDepartment())) {
             throw new ExistsException("Error : " + Department.class.getName() + " width idDepartment = \""
                     + departmentDTO.getIdDepartment() + "\" does not exists ! ");
 
         } else if (departmentRepository.existsByDepartmentName(departmentDTO.getDepartmentName())) {
             Department department = departmentRepository.findById(departmentDTO.getIdDepartment()).get();
-            if (!department.getDepartmentName().equals(departmentDTO.getDepartmentName())) {
-                throw new ExistsException("Error : " + Department.class.getName() + " width departmentName = \""
+            if (!department.getDepartmentName().equalsIgnoreCase(departmentDTO.getDepartmentName())) {
+                throw new DepartmentNameExistsException("Error : " + Department.class.getName() + " width departmentName = \""
                         + departmentDTO.getDepartmentName() + "\" already exists ! ");
             }
+            return departmentDTO;
         }
         departmentRepository.save(departmentDTO.toDepartment());
         return departmentDTO;
@@ -61,8 +63,20 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public boolean delete(String idDepartment) {
+    	if(!departmentRepository.existsById(idDepartment)) {
+    		return false;
+    	}
         departmentRepository.deleteById(idDepartment);
         return true;
+    }
+    
+    @Override
+    public DepartmentDTO getById(String idDepartment) {
+    	if(!departmentRepository.existsById(idDepartment)) {
+    		throw new ExistsException("Error : " + Department.class.getName() + " width idDepartment = \""
+                    + idDepartment + "\" does not exists ! ");
+    	}
+    	return DepartmentDTO.parseDepartmentDTO(departmentRepository.findById(idDepartment).get());
     }
 
 }

@@ -2,6 +2,7 @@ package com.quangphi.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -22,6 +25,7 @@ public class Staffs implements Serializable {
 	
 	private String idStaffs;
     private String StaffName;
+    private Date birthDay;
     private boolean gender;
     private String photo;
     private String email;
@@ -35,10 +39,11 @@ public class Staffs implements Serializable {
     public Staffs() {
     }
 
-    public Staffs(String idStaffs, String StaffName, boolean gender, String photo, String email, String phone,
+    public Staffs(String idStaffs, String StaffName,Date birthDay , boolean gender, String photo, String email, String phone,
             Long salary, String notes) {
         this.idStaffs = idStaffs;
         this.StaffName = StaffName;
+        this.birthDay = birthDay;
         this.gender = gender;
         this.photo = photo;
         this.email = email;
@@ -65,6 +70,15 @@ public class Staffs implements Serializable {
     public void setStaffName(String staffName) {
         StaffName = staffName;
     }
+    
+    @Temporal(TemporalType.DATE)
+    public Date getBirthDay() {
+		return birthDay;
+	}
+    
+    public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
 
     public boolean isGender() {
         return gender;

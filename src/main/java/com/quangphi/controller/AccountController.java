@@ -2,10 +2,6 @@ package com.quangphi.controller;
 
 import javax.validation.Valid;
 
-import com.quangphi.exception.ExistsException;
-import com.quangphi.model.AccountDTO;
-import com.quangphi.service.AccountService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.quangphi.exception.ExistsException;
+import com.quangphi.model.AccountDTO;
+import com.quangphi.service.AccountService;
+
 @Controller
 @RequestMapping("/account")
 public class AccountController {
@@ -25,7 +25,7 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 
-	@GetMapping("/home")
+	@GetMapping(value="/home")
 	public String home(ModelMap model) {
 		model.addAttribute("status", true);
 		model.addAttribute("accountDTO", new AccountDTO());
@@ -86,8 +86,8 @@ public class AccountController {
 	}
 
 	@GetMapping("/search")
-	public String search(@RequestParam String keyword, ModelMap model) {
-		if (keyword.isEmpty()) {
+	public String search(@RequestParam(required=false) String keyword, ModelMap model) {
+		if (keyword == null || keyword.isEmpty()) {
 			return "redirect:/account/home";
 		}
 		model.addAttribute("allAccounts", accountService.getByUsernameOrFullnameContaining(keyword));

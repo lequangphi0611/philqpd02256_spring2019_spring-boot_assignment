@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="common/head :: head"></head>
 <body>
 	<section id="content-wrapper" th:fragment="account-layout">
 		<div class="h1 text-center text-primary mb-5">Quản Lý Tài Khoản</div>
@@ -108,7 +106,7 @@
 									th:if="${keyword != null and allAccounts.size() > 0 and !keyword.isEmpty()}">
 									<td colspan="6" class="text-center text-muted"><a
 										th:href="@{/account/home}" class="btn btn-link">Hiển thị
-											tất cả sản phẩm...</a></td>
+											tất cả tài khoản...</a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -117,6 +115,5 @@
 			</div>
 		</div>
 	</section>
-	<th:block th:replace="common/scriptsource :: script"></th:block>
 </body>
 </html>

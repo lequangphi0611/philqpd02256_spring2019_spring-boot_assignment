@@ -8,8 +8,10 @@
 	<div id="wrapper">
 		<th:block th:replace="common/layout :: sidebar"></th:block>
 		<div id="content-wrapper">
-			<th:block th:replace="account/account-management-content :: account-layout"></th:block>
+			<th:block
+				th:replace="account/account-management-content :: account-layout"></th:block>
 		</div>
+		<footer th:replace="common/layout :: footer"> </footer>
 	</div>
 
 	<th:block th:replace="common/scriptsource :: script"></th:block>

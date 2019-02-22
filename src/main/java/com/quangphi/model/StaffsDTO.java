@@ -1,12 +1,19 @@
 package com.quangphi.model;
 
+import java.text.NumberFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.quangphi.entity.Staffs;
 
 public class StaffsDTO {
 	
 	private String idStaffs;
-    private String staffName;
-    private boolean gender;
+    private String staffsName;
+    private Date birthday;
+    private Gender gender;
     private String photo;
     private String email;
     private String phone;
@@ -18,8 +25,9 @@ public class StaffsDTO {
     public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
     	StaffsDTO staffsDTO = new StaffsDTO();
     	staffsDTO.setIdStaffs(staffsEntity.getIdStaffs());
-    	staffsDTO.setStaffName(staffsEntity.getStaffName());
-    	staffsDTO.setGender(staffsEntity.isGender());
+    	staffsDTO.setStaffsName(staffsEntity.getStaffName());
+    	staffsDTO.setBirthday(staffsEntity.getBirthDay());
+    	staffsDTO.setGender(staffsEntity.isGender() ? Gender.MALE : Gender.FEMALE);
     	staffsDTO.setPhoto(staffsEntity.getPhoto());
     	staffsDTO.setEmail(staffsEntity.getEmail());
     	staffsDTO.setPhone(staffsEntity.getPhone());
@@ -32,17 +40,19 @@ public class StaffsDTO {
     public StaffsDTO() {
 	}
 
-	public StaffsDTO(String idStaffs, String staffName, boolean gender, String photo, String email, String phone,
-			Long salary, String notes) {
+	public StaffsDTO(String idStaffs, String staffsName, Date birthday, Gender gender, String photo, String email,
+			String phone, Long salary, String notes, DepartmentDTO department) {
 		super();
 		this.idStaffs = idStaffs;
-		this.staffName = staffName;
+		this.staffsName = staffsName;
+		this.birthday = birthday;
 		this.gender = gender;
 		this.photo = photo;
 		this.email = email;
 		this.phone = phone;
 		this.salary = salary;
 		this.notes = notes;
+		this.department = department;
 	}
 
 	public String getIdStaffs() {
@@ -53,19 +63,28 @@ public class StaffsDTO {
 		this.idStaffs = idStaffs;
 	}
 
-	public String getStaffName() {
-		return staffName;
+	public String getStaffsName() {
+		return staffsName;
 	}
 
-	public void setStaffName(String staffName) {
-		this.staffName = staffName;
+	public void setStaffsName(String staffsName) {
+		this.staffsName = staffsName;
+	}
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	public Date getBirthday() {
+		return birthday;
+	}
+	
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 
-	public boolean isGender() {
+	public Gender getGender() {
 		return gender;
 	}
 
-	public void setGender(boolean gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 
@@ -120,8 +139,9 @@ public class StaffsDTO {
 	public Staffs toStaffsEntity() {
 		Staffs staffEntity = new Staffs();
 		staffEntity.setIdStaffs(this.idStaffs);
-		staffEntity.setStaffName(this.staffName);
-		staffEntity.setGender(this.gender);
+		staffEntity.setStaffName(this.staffsName);
+		staffEntity.setBirthDay(this.birthday);
+		staffEntity.setGender(this.gender == Gender.MALE);
 		staffEntity.setPhoto(this.photo);
 		staffEntity.setEmail(this.email);
 		staffEntity.setPhone(this.phone);
@@ -129,5 +149,11 @@ public class StaffsDTO {
 		staffEntity.setNotes(this.notes);
 		staffEntity.setDepartment(this.department.toDepartment());
 		return staffEntity;
+	}
+	
+	public String getSalaryCurrency() {
+		Locale locale= new Locale("vi","VN");
+		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
+		return numberFormat.format(this.salary);
 	}
 }

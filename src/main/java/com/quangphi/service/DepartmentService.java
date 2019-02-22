@@ -13,5 +13,7 @@ public interface DepartmentService {
     List<DepartmentDTO> getAllDepartments();
 
     boolean delete(String idDepartment);
+    
+    DepartmentDTO getById(String idDepartment);
 
 }
