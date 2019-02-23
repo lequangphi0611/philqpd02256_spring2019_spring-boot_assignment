@@ -65,16 +65,6 @@ public class StaffsServiceImpl implements StaffsService {
 	}
 	
 	@Override
-	public long countStaffsBy(String idDepartment) {
-		return staffsRepository.countStaffsByDepartment(new Department(idDepartment, null));
-	}
-	
-	@Override
-	public Iterable<StaffsDTO> getAllStaffsByIdDepartment(String idDepartment) {
-		return GetStaffsDTOTo(staffsRepository.findAllStaffsByDepartment(new Department(idDepartment, null)));
-	}
-	
-	@Override
 	public Iterable<StaffsDTO> findStaffsByKeywordAndIdDepartment(String idDepartment, String keyword) {
 		Department department = new Department(idDepartment, null);
 		List<StaffsDTO> result = 

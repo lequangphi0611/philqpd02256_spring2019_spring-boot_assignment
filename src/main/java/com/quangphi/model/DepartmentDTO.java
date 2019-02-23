@@ -1,5 +1,8 @@
 package com.quangphi.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 
 import com.quangphi.entity.Department;
@@ -11,6 +14,8 @@ public class DepartmentDTO {
 	@NotEmpty(message = "Không được để trống tên phòng ban")
 	private String departmentName;
 
+	private List<StaffsDTO> allStaffs = new ArrayList<>();
+
 	public DepartmentDTO() {
 	}
 
@@ -20,6 +25,13 @@ public class DepartmentDTO {
 	}
 
 	public static DepartmentDTO parseDepartmentDTO(Department department) {
+		DepartmentDTO departmentDTO = parseDepartmentDTOWidthOutFetchStaffs(department);
+		department.getStaffs()
+				.forEach(items -> departmentDTO.getAllStaffs().add(StaffsDTO.parseStaffsDTO(items, departmentDTO)));
+		return departmentDTO;
+	}
+	
+	public static DepartmentDTO parseDepartmentDTOWidthOutFetchStaffs(Department department) {
 		return new DepartmentDTO(department.getIdDepartment(), department.getDepartmentName());
 	}
 
@@ -41,6 +53,14 @@ public class DepartmentDTO {
 
 	public Department toDepartment() {
 		return new Department(idDepartment, departmentName);
+	}
+
+	public List<StaffsDTO> getAllStaffs() {
+		return allStaffs;
+	}
+
+	public void setAllStaffs(List<StaffsDTO> allStaffs) {
+		this.allStaffs = allStaffs;
 	}
 
 	@Override

@@ -15,5 +15,7 @@ public interface DepartmentService {
     boolean delete(String idDepartment);
     
     DepartmentDTO getById(String idDepartment);
+    
+    Iterable<DepartmentDTO> getAllDepartmentWidthOutFetchStaffs();
 
 }

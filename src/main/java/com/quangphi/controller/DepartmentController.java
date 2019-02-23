@@ -1,8 +1,5 @@
 package com.quangphi.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.method.annotation.ModelAndViewMethodReturnValueHandler;
 
 import com.quangphi.exception.DepartmentNameExistsException;
 import com.quangphi.exception.ExistsException;
@@ -33,19 +29,9 @@ public class DepartmentController {
 	@Autowired
 	private StaffsService staffsService;
 
-	public Iterable<DepartmentDisplay> getAllsDepartment() {
-		List<DepartmentDisplay> allDepartments = new ArrayList<>();
-		departmentService.getAllDepartments().forEach((department) -> {
-			DepartmentDisplay departmentDisplay = new DepartmentDisplay(department,
-					staffsService.countStaffsBy(department.getIdDepartment()));
-			allDepartments.add(departmentDisplay);
-		});
-		return allDepartments;
-	}
-
 	@GetMapping
 	public String home(ModelMap model) {
-		model.addAttribute("allDepartments", getAllsDepartment());
+		model.addAttribute("allDepartments", departmentService.getAllDepartments());
 		model.addAttribute("department", new DepartmentDTO());
 		return "department/department-management";
 	}
@@ -71,7 +57,7 @@ public class DepartmentController {
 		} catch (Exception e) {
 		}
 		model.addAttribute("department", department);
-		model.addAttribute("allDepartments", getAllsDepartment());
+		model.addAttribute("allDepartments", departmentService.getAllDepartments());
 		return "department/department-management";
 	}
 
@@ -83,8 +69,9 @@ public class DepartmentController {
 
 	@GetMapping("/infor/{idDepartment}")
 	public String infor(@PathVariable String idDepartment, ModelMap model) {
-		model.addAttribute("department", departmentService.getById(idDepartment));
-		model.addAttribute("allStaffs", staffsService.getAllStaffsByIdDepartment(idDepartment));
+		DepartmentDTO departmentDTO = departmentService.getById(idDepartment);
+		model.addAttribute("department", departmentDTO);
+		model.addAttribute("allStaffs", departmentDTO.getAllStaffs());
 		model.addAttribute("uriDelStaffs", "/staffs/delete/department/" + idDepartment + "/");
 		return "department/department-infor";
 	}
@@ -125,33 +112,4 @@ public class DepartmentController {
 		return "department/department-infor";
 	}
 
-	class DepartmentDisplay {
-
-		private DepartmentDTO department;
-		private long countStaffs;
-
-		public DepartmentDisplay() {
-		}
-
-		public DepartmentDisplay(DepartmentDTO department, long countStaffs) {
-			this.department = department;
-			this.countStaffs = countStaffs;
-		}
-
-		public DepartmentDTO getDepartment() {
-			return department;
-		}
-
-		public void setDepartment(DepartmentDTO department) {
-			this.department = department;
-		}
-
-		public long getCountStaffs() {
-			return countStaffs;
-		}
-
-		public void setCountStaffs(long countStaffs) {
-			this.countStaffs = countStaffs;
-		}
-	}
 }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head :: head"></head>
+<body>
+	<th:block th:replace="common/layout :: navbar"></th:block>
+	<div id="wrapper">
+		<th:block th:replace="common/layout :: sidebar"></th:block>
+		<div id="content-wrapper">
+			
+			<section class="container col-12 mt-sm-2 mb-lg-5">
+				<p class="h1 text-primary text-center">Nhân Viên</p>
+				<hr class="col-6">
+				<div class="container col-6 mt-5">
+					<div class="container col-10" >
+						<form th:action="@{/staffs/add}" th:object="${staffs}" method="post">
+							<div class="form-group">
+								<label for="idStaffs">Mã nhân viên :</label>
+								<input th:field="*{idStaffs}" class="form-control" id="idStaffs" />
+							</div>
+							<div class="form-group">
+								<label for="staffsName">Tên nhân viên : </label>
+								<input th:field="*{staffsName}" class="form-control" id="staffsName" />
+							</div>
+							<div class="form-group">
+								<label for="birthday">Ngày sinh</label>
+								<input th:field="*{birthday}" type="date" class="form-control" id="birthday"/>
+							</div>
+							<div class="form-group">
+								<div class="form-inline">
+									<label>Giới tính :</label>
+									<div class="form-inline">	
+										<th:block th:each="gender : ${genders}">
+											<div class="custom-control custom-radio ml-5 mr-4">
+											  <input type="radio" class="custom-control-input " th:value="${gender}" th:id="${gender}" name="gender" th:checked="${staffs.gender.toString() eq gender.toString()}" />
+											  <label class="custom-control-label" th:for="${gender}" th:text="${gender.toString() eq 'MALE' ? 'Nam' : 'Nữ'}"></label>
+											</div>
+										</th:block>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="department">Phòng ban : </label>
+								<select name="idDepartment" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="department">
+								    <th:block th:each="department : ${allDepartments}">
+								    	<option th:text="${department.departmentName}" th:value="${department.idDepartment}"></option>
+								    </th:block>
+								  </select>
+							</div>
+							<div class="form-group" >
+								<label for="email">Email : </label>
+								<input th:field="*{email}" class="form-control" id="email"/>
+							</div>
+							<div class="form-group" >
+								<label for="salary">Số điện thoại : </label>
+								<input th:field="*{phone}" class="form-control" id="salary"/>
+							</div>
+							<div class="form-group" >
+								<label for="salary">Lương : </label>
+								<input th:field="*{salary}" class="form-control" id="salary"/>
+							</div>
+							<div class="form-group">
+								<label for="notes">Chú thích : </label>
+								<textarea th:field="*{notes}" class="form-control" id="notes"></textarea>
+							</div>
+							<button type="submit" class="btn btn-lg btn-danger col-12"> Thêm nhân viên</button>
+						</form>
+					</div>
+				</div>
+			</section>
+			
+		</div>
+		<footer th:replace="common/layout :: footer"> </footer>
+	</div>
+	<th:block th:replace="common/scriptsource :: script"></th:block>
+</body>
+</html>

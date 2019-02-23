@@ -14,10 +14,6 @@ public interface StaffsService {
 	
 	boolean delete(String idStaffs);
 	
-	long countStaffsBy(String idDepartment);
-	
-	Iterable<StaffsDTO> getAllStaffsByIdDepartment(String idDepartment);
-	
 	Iterable<StaffsDTO> findStaffsByKeywordAndIdDepartment(String idDepartment,String keyword);
 	
 }

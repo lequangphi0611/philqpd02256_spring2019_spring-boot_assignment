@@ -13,11 +13,11 @@ public class StaffsDTO {
 	private String idStaffs;
     private String staffsName;
     private Date birthday;
-    private Gender gender;
+    private Gender gender = Gender.MALE;
     private String photo;
     private String email;
     private String phone;
-    private Long salary;
+    private Long salary = 0L;
     private String notes;
     
     private DepartmentDTO department;
@@ -34,6 +34,21 @@ public class StaffsDTO {
     	staffsDTO.setSalary(staffsEntity.getSalary());
     	staffsDTO.setNotes(staffsEntity.getNotes());
     	staffsDTO.setDepartment(DepartmentDTO.parseDepartmentDTO(staffsEntity.getDepartment()));
+    	return staffsDTO;
+    }
+    
+    public static StaffsDTO parseStaffsDTO(Staffs staffsEntity, DepartmentDTO department) {
+    	StaffsDTO staffsDTO = new StaffsDTO();
+    	staffsDTO.setIdStaffs(staffsEntity.getIdStaffs());
+    	staffsDTO.setStaffsName(staffsEntity.getStaffsName());
+    	staffsDTO.setBirthday(staffsEntity.getBirthDay());
+    	staffsDTO.setGender(staffsEntity.isGender() ? Gender.MALE : Gender.FEMALE);
+    	staffsDTO.setPhoto(staffsEntity.getPhoto());
+    	staffsDTO.setEmail(staffsEntity.getEmail());
+    	staffsDTO.setPhone(staffsEntity.getPhone());
+    	staffsDTO.setSalary(staffsEntity.getSalary());
+    	staffsDTO.setNotes(staffsEntity.getNotes());
+    	staffsDTO.setDepartment(department);
     	return staffsDTO;
     }
     

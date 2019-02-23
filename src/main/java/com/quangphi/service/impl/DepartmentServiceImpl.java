@@ -18,6 +18,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+    
+    interface Parser {
+    	DepartmentDTO parse(Department department);
+    }
 
     @Override
     public DepartmentDTO addDepartment(DepartmentDTO departmentDTO) throws ExistsException,DepartmentNameExistsException {
@@ -49,16 +53,16 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentRepository.save(departmentDTO.toDepartment());
         return departmentDTO;
     }
-
-    public List<DepartmentDTO> getDepartmentDTOs(Iterable<Department> iterable){
+    
+    public List<DepartmentDTO> getDepartmentDTOs(Iterable<Department> iterable,Parser parser){
         List<DepartmentDTO> allDepartmentDTOs = new ArrayList<>();
-        iterable.forEach((items) -> allDepartmentDTOs.add(DepartmentDTO.parseDepartmentDTO(items)));
+        iterable.forEach((items) -> allDepartmentDTOs.add(parser.parse(items)));
         return allDepartmentDTOs;
     }
 
     @Override
     public List<DepartmentDTO> getAllDepartments() {
-        return getDepartmentDTOs(departmentRepository.findAll());
+        return getDepartmentDTOs(departmentRepository.findAll(), (department) -> DepartmentDTO.parseDepartmentDTO(department));
     }
 
     @Override
@@ -77,6 +81,12 @@ public class DepartmentServiceImpl implements DepartmentService {
                     + idDepartment + "\" does not exists ! ");
     	}
     	return DepartmentDTO.parseDepartmentDTO(departmentRepository.findById(idDepartment).get());
+    }
+    
+    @Override
+    public Iterable<DepartmentDTO> getAllDepartmentWidthOutFetchStaffs() {
+    	return getDepartmentDTOs(departmentRepository.findAll(), 
+    			(department) -> DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(department));
     }
 
 }
