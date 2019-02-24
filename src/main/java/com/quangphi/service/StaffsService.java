@@ -1,5 +1,6 @@
 package com.quangphi.service;
 
+import com.quangphi.model.DepartmentDTO;
 import com.quangphi.model.StaffsDTO;
 
 public interface StaffsService {
@@ -15,5 +16,7 @@ public interface StaffsService {
 	boolean delete(String idStaffs);
 	
 	Iterable<StaffsDTO> findStaffsByKeywordAndIdDepartment(String idDepartment,String keyword);
+	
+	long countStaffBy(DepartmentDTO department);
 	
 }

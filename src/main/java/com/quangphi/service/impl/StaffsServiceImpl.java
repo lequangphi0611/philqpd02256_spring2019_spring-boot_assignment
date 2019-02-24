@@ -1,6 +1,5 @@
 package com.quangphi.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,27 +8,35 @@ import org.springframework.stereotype.Service;
 import com.quangphi.entity.Department;
 import com.quangphi.entity.Staffs;
 import com.quangphi.exception.ExistsException;
+import com.quangphi.model.DepartmentDTO;
 import com.quangphi.model.StaffsDTO;
+import com.quangphi.repository.DepartmentRepository;
 import com.quangphi.repository.StaffsRepository;
 import com.quangphi.service.StaffsService;
+import com.quangphi.util.ConvertListSupport;
+import com.quangphi.util.Parsers;
 
 @Service
 public class StaffsServiceImpl implements StaffsService {
-	
+
 	@Autowired
 	private StaffsRepository staffsRepository;
-	
-	public Iterable<StaffsDTO> GetStaffsDTOTo(Iterable<Staffs> allStaffsEntity){
-		List<StaffsDTO> allStaffDTOs = new ArrayList<>();
-		allStaffsEntity.forEach(staff -> allStaffDTOs.add(StaffsDTO.parseStaffsDTO(staff)));
-		return allStaffDTOs;
+
+	@Autowired
+	private DepartmentRepository departmentRepository;
+
+	@Autowired
+	private ConvertListSupport<StaffsDTO, Staffs> convertListSupport;
+
+	public Parsers<StaffsDTO, Staffs> getPasersStaffs() {
+		return (staffs) -> StaffsDTO.parseStaffsDTO(staffs);
 	}
 
 	@Override
 	public StaffsDTO addStaffs(StaffsDTO staffsDTO) {
-		if(staffsRepository.existsById(staffsDTO.getIdStaffs())) {
+		if (staffsRepository.existsById(staffsDTO.getIdStaffs())) {
 			throw new ExistsException("Error : " + Staffs.class.getName() + " width idStaffs = \""
-                    + staffsDTO.getIdStaffs() + "\" already exists ! ");
+					+ staffsDTO.getIdStaffs() + "\" already exists ! ");
 		}
 		staffsRepository.save(staffsDTO.toStaffsEntity());
 		return staffsDTO;
@@ -37,9 +44,9 @@ public class StaffsServiceImpl implements StaffsService {
 
 	@Override
 	public StaffsDTO updateStaffs(StaffsDTO staffsDTO) {
-		if(!staffsRepository.existsById(staffsDTO.getIdStaffs())) {
+		if (!staffsRepository.existsById(staffsDTO.getIdStaffs())) {
 			throw new ExistsException("Error : " + Staffs.class.getName() + " width idStaffs = \""
-                    + staffsDTO.getIdStaffs() + "\" does not exists ! ");
+					+ staffsDTO.getIdStaffs() + "\" does not exists ! ");
 		}
 		staffsRepository.save(staffsDTO.toStaffsEntity());
 		return staffsDTO;
@@ -47,7 +54,7 @@ public class StaffsServiceImpl implements StaffsService {
 
 	@Override
 	public Iterable<StaffsDTO> getALLStaffs() {
-		return GetStaffsDTOTo(staffsRepository.findAll());
+		return convertListSupport.converting(staffsRepository.findAll(), this.getPasersStaffs());
 	}
 
 	@Override
@@ -57,40 +64,44 @@ public class StaffsServiceImpl implements StaffsService {
 
 	@Override
 	public boolean delete(String idStaffs) {
-		if(!staffsRepository.existsById(idStaffs)) {
+		if (!staffsRepository.existsById(idStaffs)) {
 			return false;
 		}
 		staffsRepository.deleteById(idStaffs);
 		return true;
 	}
-	
+
 	@Override
 	public Iterable<StaffsDTO> findStaffsByKeywordAndIdDepartment(String idDepartment, String keyword) {
-		Department department = new Department(idDepartment, null);
-		List<StaffsDTO> result = 
-				(List<StaffsDTO>) GetStaffsDTOTo(staffsRepository
-						.findAllStaffsByDepartmentAndIdStaffsContaining(department, keyword));
-		List<StaffsDTO> tempStaffsDTO = (List<StaffsDTO>) GetStaffsDTOTo( staffsRepository
-				.findAllStaffsByDepartmentAndStaffsNameContaining(department, keyword));
-		if(!tempStaffsDTO.isEmpty()) {
-			tempStaffsDTO.forEach(
-					(itemsStaffs) -> {
-						if(!existsStaffsIn(itemsStaffs, result)) {
-							result.add(itemsStaffs);
-						}
-					}
-			);
+		Department department = departmentRepository.findById(idDepartment).get();
+		List<StaffsDTO> result = (List<StaffsDTO>) convertListSupport.converting(
+				staffsRepository.findAllStaffsByDepartmentAndIdStaffsContaining(department, keyword),
+				this.getPasersStaffs());
+		List<StaffsDTO> tempStaffsDTO = (List<StaffsDTO>) convertListSupport.converting(
+				staffsRepository.findAllStaffsByDepartmentAndStaffsNameContaining(department, keyword),
+				this.getPasersStaffs());
+		if (!tempStaffsDTO.isEmpty()) {
+			tempStaffsDTO.forEach((itemsStaffs) -> {
+				if (!existsStaffsIn(itemsStaffs, result)) {
+					result.add(itemsStaffs);
+				}
+			});
 		}
 		return result;
 	}
-	
-	boolean existsStaffsIn(StaffsDTO staffsDTO,Iterable<StaffsDTO> allIStaffsDTO) {
-		for(StaffsDTO items : allIStaffsDTO) {
-			if(items.getIdStaffs().equals(staffsDTO.getIdStaffs())) {
+
+	private boolean existsStaffsIn(StaffsDTO staffsDTO, Iterable<StaffsDTO> allIStaffsDTO) {
+		for (StaffsDTO items : allIStaffsDTO) {
+			if (items.getIdStaffs().equals(staffsDTO.getIdStaffs())) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public long countStaffBy(DepartmentDTO department) {
+		return staffsRepository.countStaffsByDepartment(department.toDepartment());
 	}
 
 }

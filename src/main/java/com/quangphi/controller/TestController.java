@@ -44,7 +44,7 @@ public class TestController {
 	@GetMapping("/testIterable")
 	@ResponseBody
 	public String getALl() {
-		staffsRepository.findAllStaffsByDepartmentAndIdStaffsContaining(new Department("PB001",null), "1")
+		staffsRepository.findAllStaffsByDepartmentAndIdStaffsContaining(new Department("PB001",null), "S")
 			.forEach(System.out::println)
 		;
 		return "ddddddd";

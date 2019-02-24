@@ -33,22 +33,7 @@ public class StaffsDTO {
     	staffsDTO.setPhone(staffsEntity.getPhone());
     	staffsDTO.setSalary(staffsEntity.getSalary());
     	staffsDTO.setNotes(staffsEntity.getNotes());
-    	staffsDTO.setDepartment(DepartmentDTO.parseDepartmentDTO(staffsEntity.getDepartment()));
-    	return staffsDTO;
-    }
-    
-    public static StaffsDTO parseStaffsDTO(Staffs staffsEntity, DepartmentDTO department) {
-    	StaffsDTO staffsDTO = new StaffsDTO();
-    	staffsDTO.setIdStaffs(staffsEntity.getIdStaffs());
-    	staffsDTO.setStaffsName(staffsEntity.getStaffsName());
-    	staffsDTO.setBirthday(staffsEntity.getBirthDay());
-    	staffsDTO.setGender(staffsEntity.isGender() ? Gender.MALE : Gender.FEMALE);
-    	staffsDTO.setPhoto(staffsEntity.getPhoto());
-    	staffsDTO.setEmail(staffsEntity.getEmail());
-    	staffsDTO.setPhone(staffsEntity.getPhone());
-    	staffsDTO.setSalary(staffsEntity.getSalary());
-    	staffsDTO.setNotes(staffsEntity.getNotes());
-    	staffsDTO.setDepartment(department);
+    	staffsDTO.setDepartment(DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(staffsEntity.getDepartment()));
     	return staffsDTO;
     }
     

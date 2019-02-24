@@ -61,7 +61,6 @@ public class AccountController {
 		try {
 			accountService.addAccount(accountDTO);
 			model.addAttribute("accountDTO", new AccountDTO());
-			model.addAttribute("success", true);
 			model.addAttribute("message", "Thêm tài khoản "+"\""+accountDTO.getUsername()+"\" thành công");
 		} catch (ExistsException e) {
 			model.addAttribute("username_error", "Tên đăng nhập đã tồn tại !");

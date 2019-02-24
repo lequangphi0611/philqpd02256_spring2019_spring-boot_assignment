@@ -42,7 +42,7 @@
 								<label for="department">Phòng ban : </label>
 								<select name="idDepartment" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="department">
 								    <th:block th:each="department : ${allDepartments}">
-								    	<option th:text="${department.departmentName}" th:value="${department.idDepartment}"></option>
+								    	<option th:text="${department.departmentName}" th:value="${department.idDepartment}" th:selected="${idDepartment != null and idDepartment eq department.idDepartment}"></option>
 								    </th:block>
 								  </select>
 							</div>
@@ -63,6 +63,7 @@
 								<textarea th:field="*{notes}" class="form-control" id="notes"></textarea>
 							</div>
 							<button type="submit" class="btn btn-lg btn-danger col-12"> Thêm nhân viên</button>
+							<a th:href="${requestURL}" class="btn btn-lg btn-light col-12 mt-sm-2"> Trở về </a>
 						</form>
 					</div>
 				</div>

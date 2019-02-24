@@ -131,7 +131,7 @@ public class Staffs implements Serializable {
         this.notes = notes;
     }
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="idDepartment")
     public Department getDepartment() {
         return department;

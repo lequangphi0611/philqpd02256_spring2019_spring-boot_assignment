@@ -1,27 +1,29 @@
 package com.quangphi.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.quangphi.entity.Account;
 import com.quangphi.exception.ExistsException;
 import com.quangphi.model.AccountDTO;
 import com.quangphi.repository.AccountRepository;
 import com.quangphi.service.AccountService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.quangphi.util.ConvertListSupport;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+    
+    @Autowired
+	private ConvertListSupport<AccountDTO, Account> convertListSupport;
 
     private List<AccountDTO> parseAccountDTOs(Iterable<Account> accounts) {
-        List<AccountDTO> accountDTOs = new ArrayList<>();
-        accounts.forEach(items -> accountDTOs.add(AccountDTO.parseAccountDTO(items)));
-        return accountDTOs;
+        return (List<AccountDTO>) convertListSupport
+        		.converting(accounts, accountEntity -> AccountDTO.parseAccountDTO(accountEntity));
     }
 
     @Override

@@ -5,7 +5,7 @@
 		<div class="h1 text-center text-primary mb-5">Quản Lý Tài Khoản</div>
 		<div class="container container-fluid">
 			<div class="col-12">
-				<div th:if="${success}"
+				<div th:if="${message != null}"
 					class="ml-5 col-4 alert alert-info font-italic">
 					<i th:text="${message}"></i> !
 				</div>

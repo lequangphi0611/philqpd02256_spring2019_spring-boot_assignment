@@ -48,10 +48,10 @@
 									<a th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark" th:text="${department.departmentName}"></a>
 								</td>
 								<td >
-									<a th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark" th:text="${department.allStaffs.size()}"></a>
+									<a th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark" th:text="${department.countStaffs}"></a>
 								</td>
 								<td class="text-center">
-									<a href="#" class="btn btn-primary"> <i class="fas fa-plus-square"></i> Thêm nhân viên</a>
+									<a th:href="@{/department/{idDepartment}/staffs/add(idDepartment=${department.idDepartment})}" class="btn btn-primary"> <i class="fas fa-plus-square"></i> Thêm nhân viên</a>
 								</td>
 								<td class="text-center">
 									<a th:href="@{/department/delete/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-danger"> <i class="fas fa-times-circle"></i> Xóa</a>

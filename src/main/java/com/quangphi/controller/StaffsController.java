@@ -28,7 +28,7 @@ public class StaffsController {
 	
 	public ModelMap initForm(ModelMap model, StaffsDTO staffsDTO) {
 		model.addAttribute("staffs", staffsDTO);
-		model.addAttribute("allDepartments", departmentService.getAllDepartmentWidthOutFetchStaffs());
+		model.addAttribute("allDepartments", departmentService.getAllDepartmentWithOutFetchStaffs());
 		model.addAttribute("genders",Gender.values());
 		return model;
 	}

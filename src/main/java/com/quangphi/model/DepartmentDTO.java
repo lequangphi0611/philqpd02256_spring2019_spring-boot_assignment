@@ -13,6 +13,8 @@ public class DepartmentDTO {
 	private String idDepartment;
 	@NotEmpty(message = "Không được để trống tên phòng ban")
 	private String departmentName;
+	
+	private long countStaffs;
 
 	private List<StaffsDTO> allStaffs = new ArrayList<>();
 
@@ -27,7 +29,7 @@ public class DepartmentDTO {
 	public static DepartmentDTO parseDepartmentDTO(Department department) {
 		DepartmentDTO departmentDTO = parseDepartmentDTOWidthOutFetchStaffs(department);
 		department.getStaffs()
-				.forEach(items -> departmentDTO.getAllStaffs().add(StaffsDTO.parseStaffsDTO(items, departmentDTO)));
+				.forEach(items -> departmentDTO.getAllStaffs().add(StaffsDTO.parseStaffsDTO(items)));
 		return departmentDTO;
 	}
 	
@@ -61,6 +63,14 @@ public class DepartmentDTO {
 
 	public void setAllStaffs(List<StaffsDTO> allStaffs) {
 		this.allStaffs = allStaffs;
+	}
+	
+	public long getCountStaffs() {
+		return countStaffs;
+	}
+	
+	public void setCountStaffs(long countStaffs) {
+		this.countStaffs = countStaffs;
 	}
 
 	@Override

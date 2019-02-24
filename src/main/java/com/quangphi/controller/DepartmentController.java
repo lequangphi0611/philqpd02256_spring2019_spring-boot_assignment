@@ -1,5 +1,7 @@
 package com.quangphi.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.quangphi.exception.DepartmentNameExistsException;
 import com.quangphi.exception.ExistsException;
 import com.quangphi.model.DepartmentDTO;
+import com.quangphi.model.StaffsDTO;
 import com.quangphi.service.DepartmentService;
 import com.quangphi.service.StaffsService;
 
@@ -28,10 +31,23 @@ public class DepartmentController {
 
 	@Autowired
 	private StaffsService staffsService;
+	
+	@Autowired
+	private StaffsController staffsController;
+	
+	
+	private Iterable<DepartmentDTO> getAllDepartments() {
+		List<DepartmentDTO> allDepartments = (List<DepartmentDTO>) departmentService
+				.getAllDepartmentWithOutFetchStaffs();
+		allDepartments.forEach((department) -> department
+				.setCountStaffs(staffsService.countStaffBy(department)));
+		return allDepartments;
+	}
 
 	@GetMapping
 	public String home(ModelMap model) {
-		model.addAttribute("allDepartments", departmentService.getAllDepartments());
+		
+		model.addAttribute("allDepartments", getAllDepartments());
 		model.addAttribute("department", new DepartmentDTO());
 		return "department/department-management";
 	}
@@ -69,7 +85,7 @@ public class DepartmentController {
 
 	@GetMapping("/infor/{idDepartment}")
 	public String infor(@PathVariable String idDepartment, ModelMap model) {
-		DepartmentDTO departmentDTO = departmentService.getById(idDepartment);
+		DepartmentDTO departmentDTO = departmentService.getByIdFetchStaffs(idDepartment);
 		model.addAttribute("department", departmentDTO);
 		model.addAttribute("allStaffs", departmentDTO.getAllStaffs());
 		model.addAttribute("uriDelStaffs", "/staffs/delete/department/" + idDepartment + "/");
@@ -85,16 +101,16 @@ public class DepartmentController {
 	public String edit(@ModelAttribute("department") @Valid DepartmentDTO department, BindingResult bindingResult,
 			@PathVariable String idDepartment, ModelMap model) {
 		String message = null;
-		try {
-			if (bindingResult.hasErrors()) {
-				message = "Không được để trống !";
-			} else {
+		if (bindingResult.hasErrors()) {
+			message = "Không được để trống !";
+		} else {
+			try {
 				department.setIdDepartment(idDepartment);
 				departmentService.updateDepartment(department);
 				return "redirect:/department/infor/" + idDepartment;
+			} catch (DepartmentNameExistsException e) {
+				message = "Tên phòng ban đã tồn tại !";
 			}
-		} catch (DepartmentNameExistsException e) {
-			message = "Tên phòng ban đã tồn tại !";
 		}
 		model.addAttribute("nameError", message);
 		return infor(idDepartment, model);
@@ -106,10 +122,18 @@ public class DepartmentController {
 		if (keyword == null || keyword.isEmpty()) {
 			return "redirect:/department/infor/" + idDepartment;
 		}
-		model.addAttribute("department", departmentService.getById(idDepartment));
+		model.addAttribute("department", departmentService.getByIdWithOutFetchStaffs(idDepartment));
 		model.addAttribute("allStaffs", staffsService.findStaffsByKeywordAndIdDepartment(idDepartment, keyword));
 		model.addAttribute("search_key", keyword);
 		return "department/department-infor";
+	}
+	
+	@GetMapping("/{idDepartment}/staffs/add")
+	public String addStaffsPage(@PathVariable String idDepartment, ModelMap model) {
+		staffsController.initForm(model, new StaffsDTO());
+		model.addAttribute("requestURL", "/department/infor/"+idDepartment);
+		model.addAttribute("idDepartment", idDepartment);
+		return "staffs/add-staffs.html";
 	}
 
 }
