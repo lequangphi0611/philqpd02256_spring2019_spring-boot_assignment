@@ -89,6 +89,28 @@ public class StaffsServiceImpl implements StaffsService {
 		}
 		return result;
 	}
+	
+	@Override
+	public Iterable<StaffsDTO> findStaffsByKeyword(String keyword) {
+		List<Staffs> allsStaffByIdStaff = (List<Staffs>) staffsRepository
+				.findAllStaffsByIdStaffsContaining(keyword);
+		List<StaffsDTO> result = (List<StaffsDTO>) convertListSupport
+				.converting(allsStaffByIdStaff, this.getPasersStaffs());
+		List<Staffs> tempStaffs = (List<Staffs>) staffsRepository
+				.findAllStaffsByStaffsNameContaining(keyword);
+		if(!tempStaffs.isEmpty()) {
+			tempStaffs.forEach(
+					(staffs) -> {
+						StaffsDTO staffDTO = StaffsDTO.parseStaffsDTO(staffs);
+						if(!existsStaffsIn(staffDTO, result)) {
+							result.add(staffDTO);
+						}
+					}
+			);
+		}
+		
+		return result;
+	}
 
 	private boolean existsStaffsIn(StaffsDTO staffsDTO, Iterable<StaffsDTO> allIStaffsDTO) {
 		for (StaffsDTO items : allIStaffsDTO) {

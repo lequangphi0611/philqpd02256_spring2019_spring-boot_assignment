@@ -2,20 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common/head :: head"></head>
 <body>
-	<th:block th:replace="common/layout :: navbar"></th:block>
-	<div id="wrapper">
-		<th:block th:replace="common/layout :: sidebar"></th:block>
-		<div id="content-wrapper">
-			
-			<section class="container col-12 mt-sm-2 mb-lg-5">
-				<p class="h1 text-primary text-center">Nhân Viên</p>
-				<hr class="col-6">
-				<div class="container col-6 mt-5">
+	<section>
+		<div class="container col-6 mt-5" th:fragment="form_staffs">
 					<div class="container col-10" >
-						<form th:action="@{/staffs/add}" th:object="${staffs}" method="post">
+						<form th:action="${action}" th:object="${staffs}" method="post">
 							<div class="form-group">
 								<label for="idStaffs">Mã nhân viên :</label>
-								<input th:field="*{idStaffs}" class="form-control" id="idStaffs" />
+								<input th:field="*{idStaffs}" class="form-control" id="idStaffs" th:readonly="${staffs.idStaffs != null and !staffs.idStaffs.isEmpty()}"/>
 							</div>
 							<div class="form-group">
 								<label for="staffsName">Tên nhân viên : </label>
@@ -62,16 +55,12 @@
 								<label for="notes">Chú thích : </label>
 								<textarea th:field="*{notes}" class="form-control" id="notes"></textarea>
 							</div>
-							<button type="submit" class="btn btn-lg btn-danger col-12"> Thêm nhân viên</button>
+							<button type="submit" class="btn btn-lg btn-danger col-12">Lưu </button>
 							<a th:href="${requestURL}" class="btn btn-lg btn-light col-12 mt-sm-2"> Trở về </a>
 						</form>
 					</div>
 				</div>
-			</section>
-			
-		</div>
-		<footer th:replace="common/layout :: footer"> </footer>
-	</div>
-	<th:block th:replace="common/scriptsource :: script"></th:block>
+	</section>
+<th:block th:replace="common/scriptsource :: script"></th:block>
 </body>
 </html>

@@ -23,7 +23,7 @@
 							<small th:if="${nameExists != null}" class="font-italic text-danger" th:text="${nameExists}"></small>
 							<small th:if="${#fields.hasErrors('departmentName')}" th:errors="*{departmentName}" class="font-italic text-danger"></small>
 						</div>
-						<input type="submit" value="Lưu" class="btn btn-primary mb-2"/>
+						<button type="submit" class="btn btn-primary mb-2"><i class="fas fa-save"></i> Lưu</button>
 					</form>
 				</div>
 				<hr class="col-11"/>
@@ -32,6 +32,7 @@
 					<table class="table table-bordered">
 						<thead>
 							<tr>
+								<th>No.</th>
 								<th>Mã Phòng Ban</th>
 								<th>Tên Phòng Ban</th>
 								<th>Số Lượng Nhân Viên</th>
@@ -40,7 +41,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="department : ${allDepartments}">
+							<tr th:each="department,i : ${allDepartments}">
+								<td th:text="${i.index + 1}" scope="row"></td>
 								<td>
 									<a th:text="${department.idDepartment}" th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark"></a>
 								</td>

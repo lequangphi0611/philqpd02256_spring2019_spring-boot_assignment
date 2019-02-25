@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface DepartmentRepository extends CrudRepository<Department,String> {
 
     boolean existsByDepartmentName(String departmentName);
+    
 }

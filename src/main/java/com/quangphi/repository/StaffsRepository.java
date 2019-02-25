@@ -14,5 +14,9 @@ public interface StaffsRepository extends CrudRepository<Staffs, String> {
 	Iterable<Staffs> findAllStaffsByDepartmentAndStaffsNameContaining(Department department, String staffsName);
 	
 	long countStaffsByDepartment(Department department);
+	
+	Iterable<Staffs> findAllStaffsByStaffsNameContaining(String staffsName);
+	
+	Iterable<Staffs> findAllStaffsByIdStaffsContaining(String idStaffs);
 
 }

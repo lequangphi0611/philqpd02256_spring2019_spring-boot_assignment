@@ -1,5 +1,6 @@
 package com.quangphi.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -31,22 +32,19 @@ public class DepartmentController {
 
 	@Autowired
 	private StaffsService staffsService;
-	
+
 	@Autowired
 	private StaffsController staffsController;
-	
-	
+
 	private Iterable<DepartmentDTO> getAllDepartments() {
 		List<DepartmentDTO> allDepartments = (List<DepartmentDTO>) departmentService
 				.getAllDepartmentWithOutFetchStaffs();
-		allDepartments.forEach((department) -> department
-				.setCountStaffs(staffsService.countStaffBy(department)));
+		allDepartments.forEach((department) -> department.setCountStaffs(staffsService.countStaffBy(department)));
 		return allDepartments;
 	}
 
 	@GetMapping
 	public String home(ModelMap model) {
-		
 		model.addAttribute("allDepartments", getAllDepartments());
 		model.addAttribute("department", new DepartmentDTO());
 		return "department/department-management";
@@ -88,7 +86,8 @@ public class DepartmentController {
 		DepartmentDTO departmentDTO = departmentService.getByIdFetchStaffs(idDepartment);
 		model.addAttribute("department", departmentDTO);
 		model.addAttribute("allStaffs", departmentDTO.getAllStaffs());
-		model.addAttribute("uriDelStaffs", "/staffs/delete/department/" + idDepartment + "/");
+		model.addAttribute("urlDelStaffs", "/staffs/delete/department/" + idDepartment + "/");
+		model.addAttribute("urlEdit", "/department/" + idDepartment + "/staffs/");
 		return "department/department-infor";
 	}
 
@@ -122,18 +121,32 @@ public class DepartmentController {
 		if (keyword == null || keyword.isEmpty()) {
 			return "redirect:/department/infor/" + idDepartment;
 		}
-		model.addAttribute("department", departmentService.getByIdWithOutFetchStaffs(idDepartment));
-		model.addAttribute("allStaffs", staffsService.findStaffsByKeywordAndIdDepartment(idDepartment, keyword));
-		model.addAttribute("search_key", keyword);
+		model.addAllAttributes(new HashMap<String, Object>() {
+			{
+				put("department", departmentService.getByIdWithOutFetchStaffs(idDepartment));
+				put("allStaffs", staffsService.findStaffsByKeywordAndIdDepartment(idDepartment, keyword));
+				put("search_key", keyword);
+				put("urlDelStaffs", "/staffs/delete/department/" + idDepartment + "/");
+				put("urlEdit", "/department/" + idDepartment + "/staffs/");
+			}
+		});
 		return "department/department-infor";
 	}
-	
+
 	@GetMapping("/{idDepartment}/staffs/add")
 	public String addStaffsPage(@PathVariable String idDepartment, ModelMap model) {
-		staffsController.initForm(model, new StaffsDTO());
-		model.addAttribute("requestURL", "/department/infor/"+idDepartment);
 		model.addAttribute("idDepartment", idDepartment);
-		return "staffs/add-staffs.html";
+		staffsController.initForm(model, new StaffsDTO(), "/department/infor/" + idDepartment,
+				"/staffs/add/department");
+		return "staffs/add-or-update-staffs";
+	}
+
+	@GetMapping("{idDepartment}/staffs/{idStaffs}")
+	public String editStaffsPage(@PathVariable String idStaffs, @PathVariable String idDepartment, ModelMap model) {
+		String requestURL = "/department/infor/" + idDepartment;
+		String action = "/staffs/edit/department";
+		staffsController.initForm(model, staffsService.getByID(idStaffs), requestURL, action);
+		return "staffs/add-or-update-staffs";
 	}
 
 }

@@ -6,12 +6,12 @@
 	<div id="wrapper">
 		<th:block th:replace="common/layout :: sidebar"></th:block>
 		<div id="content-wrapper">
-			<section class="mt-3 container">
+			<section class="mt-3 container col-12">
 				<div class="text-center text-info h1 ">
 					Thông Tin Phòng Ban
 				</div>
 				<hr class="hr col-6 mt-4 mb-4">
-				<div class="mt-2 container">
+				<div class="mt-2 container col-12">
 					<table class="spacing-table">
 						<tr>
 							<td> Mã phòng ban</td>
@@ -41,12 +41,15 @@
 											<input th:field="*{departmentName}" class="form-control mb-2 mr-sm-2" id="departmentName"/>
 											<small th:if="${#fields.hasErrors('departmentName')}" th:errors="*{departmentName}" class="font-italic text-danger"></small>
 										</div>
-										<input type="submit" value="Lưu" class="btn btn-primary mb-2 " />
+										<button type="submit" class="btn btn-primary mb-2 "><i class="fas fa-save"></i> Lưu</button>
 									</form>
 								</div>
 							</td>
 						</tr>
 					</table>
+				</div>
+				<div class="container col-12">
+					<a class="btn btn-primary" th:href="@{/department}"><i class="fas fa-home"></i>Tất cả phòng ban</a>
 				</div>
 				<hr class="hr col-11">
 				<div class="clear-fix mb-5">
