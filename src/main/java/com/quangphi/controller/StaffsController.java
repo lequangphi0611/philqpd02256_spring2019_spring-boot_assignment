@@ -3,7 +3,12 @@ package com.quangphi.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.annotation.MultipartConfig;
+import com.quangphi.model.DepartmentDTO;
+import com.quangphi.model.Gender;
+import com.quangphi.model.StaffsDTO;
+import com.quangphi.service.DepartmentService;
+import com.quangphi.service.StaffsService;
+import com.quangphi.service.StorageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.quangphi.model.DepartmentDTO;
-import com.quangphi.model.Gender;
-import com.quangphi.model.StaffsDTO;
-import com.quangphi.service.DepartmentService;
-import com.quangphi.service.StaffsService;
-import com.quangphi.service.StorageService;
 
 @Controller
 @RequestMapping("/staffs")
@@ -36,10 +33,11 @@ public class StaffsController {
 	@Autowired
 	private StorageService storageService;
 
-	Map<String, Object> attributeURLEditAndDel = new HashMap<String, Object>() {
+	final Map<String, Object> attributeURLEditAndDel = new HashMap<String, Object>() {
 		{
 			put("urlEdit", "/staffs/edit/");
 			put("urlDelStaffs", "/staffs/delete/");
+			put("urlRecords","/records/");
 		}
 	};
 

@@ -15,11 +15,12 @@
 						<th>Email</th>
 						<th>Số điện thoại</th>
 						<th>Lương</th>
+						<th>Cấp độ</th>
 						<th>Chú thích</th>
 						<th>Phòng ban</th>
 						<th></th>
 						<th></th>
-						
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -29,7 +30,6 @@
 								<i class="fas fa-times-circle text-danger"></i>
 								<th:block th:if="${search_key == null}">
 									không có nhân viên nào
-									<a class="btn btn-link mb-sm-1" href="#">Thêm nhân viên</a>
 								</th:block>
 								<th:block th:if="${search_key != null}">Không tìm thấy nhân viên</th:block>
 							</div>
@@ -50,8 +50,12 @@
 						<td class="align-middle" th:text="${staffs.email}"></td>
 						<td class="align-middle" th:text="${staffs.phone}"></td>
 						<td class="align-middle" th:text="${staffs.getSalaryCurrency()}"></td>
+						<td class="align-middle text-center font-weight-bold" th:text="${staffs.getLevel()}"></td>
 						<td class="align-middle" th:text="${staffs.notes}"></td>
 						<td class="align-middle" th:text="${staffs.department}"></td>
+						<td class="align-middle">
+							<a class="btn btn-primary" th:href="${urlRecords} + ${staffs.idStaffs}" role="button"><i class="fas fa-comment-alt"></i></a>
+						</td>
 						<td class="align-middle text-center">
 							<a th:href="${urlEdit} + ${staffs.idStaffs}" class="btn btn-warning "><i class="fas fa-edit"></i></a>	
 						</td>

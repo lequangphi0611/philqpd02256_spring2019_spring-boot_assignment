@@ -1,5 +1,6 @@
 package com.quangphi.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,10 @@ public class StaffsServiceImpl implements StaffsService {
 
 	@Override
 	public Iterable<StaffsDTO> getALLStaffs() {
-		return convertListSupport.converting(staffsRepository.findAll(), this.getPasersStaffs());
+		List<StaffsDTO> list = (List<StaffsDTO>) convertListSupport.converting(staffsRepository.findAll(),
+				this.getPasersStaffs());
+		Collections.sort(list);
+		return list;
 	}
 
 	@Override
@@ -89,26 +93,22 @@ public class StaffsServiceImpl implements StaffsService {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Iterable<StaffsDTO> findStaffsByKeyword(String keyword) {
-		List<Staffs> allsStaffByIdStaff = (List<Staffs>) staffsRepository
-				.findAllStaffsByIdStaffsContaining(keyword);
-		List<StaffsDTO> result = (List<StaffsDTO>) convertListSupport
-				.converting(allsStaffByIdStaff, this.getPasersStaffs());
-		List<Staffs> tempStaffs = (List<Staffs>) staffsRepository
-				.findAllStaffsByStaffsNameContaining(keyword);
-		if(!tempStaffs.isEmpty()) {
-			tempStaffs.forEach(
-					(staffs) -> {
-						StaffsDTO staffDTO = StaffsDTO.parseStaffsDTO(staffs);
-						if(!existsStaffsIn(staffDTO, result)) {
-							result.add(staffDTO);
-						}
-					}
-			);
+		List<Staffs> allsStaffByIdStaff = (List<Staffs>) staffsRepository.findAllStaffsByIdStaffsContaining(keyword);
+		List<StaffsDTO> result = (List<StaffsDTO>) convertListSupport.converting(allsStaffByIdStaff,
+				this.getPasersStaffs());
+		List<Staffs> tempStaffs = (List<Staffs>) staffsRepository.findAllStaffsByStaffsNameContaining(keyword);
+		if (!tempStaffs.isEmpty()) {
+			tempStaffs.forEach((staffs) -> {
+				StaffsDTO staffDTO = StaffsDTO.parseStaffsDTO(staffs);
+				if (!existsStaffsIn(staffDTO, result)) {
+					result.add(staffDTO);
+				}
+			});
 		}
-		
+
 		return result;
 	}
 
@@ -120,7 +120,7 @@ public class StaffsServiceImpl implements StaffsService {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public long countStaffBy(DepartmentDTO department) {
 		return staffsRepository.countStaffsByDepartment(department.toDepartment());

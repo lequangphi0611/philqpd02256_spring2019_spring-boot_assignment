@@ -84,10 +84,13 @@ public class DepartmentController {
 	@GetMapping("/infor/{idDepartment}")
 	public String infor(@PathVariable String idDepartment, ModelMap model) {
 		DepartmentDTO departmentDTO = departmentService.getByIdFetchStaffs(idDepartment);
-		model.addAttribute("department", departmentDTO);
-		model.addAttribute("allStaffs", departmentDTO.getAllStaffs());
-		model.addAttribute("urlDelStaffs", "/staffs/delete/" + idDepartment + "/");
-		model.addAttribute("urlEdit", "/department/" + idDepartment + "/staffs/");
+		model.addAllAttributes(new HashMap<String,Object>(){{
+			put("department", departmentDTO);
+			put("allStaffs", departmentDTO.getAllStaffs());
+			put("urlDelStaffs", "/staffs/delete/" + idDepartment + "/");
+			put("urlEdit", "/department/" + idDepartment + "/staffs/");
+			put("urlRecords","/records/"+idDepartment+"/");
+		}});
 		return "department/department-infor";
 	}
 

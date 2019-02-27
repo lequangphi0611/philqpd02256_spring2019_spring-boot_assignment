@@ -25,10 +25,6 @@ public class Records implements Serializable {
 
     private Staffs staffs;
 
-    {
-        date = new Date();
-    }
-
     public Records(){}
 
     public Records(int idRecords, boolean type, String reason, Date date) {
@@ -37,6 +33,15 @@ public class Records implements Serializable {
         this.reason = reason;
         this.date = date;
     }
+
+
+    public Records(boolean type, String reason, Date date, Staffs staffs) {
+        this.type = type;
+        this.reason = reason;
+        this.date = date;
+        this.staffs = staffs;
+    }
+
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

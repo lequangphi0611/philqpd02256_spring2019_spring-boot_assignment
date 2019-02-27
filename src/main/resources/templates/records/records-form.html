@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/head :: head"></head>
+
+<body>
+    <th:block th:replace="common/layout :: navbar"></th:block>
+    <div id="wrapper">
+        <th:block th:replace="common/layout :: sidebar"></th:block>
+        <div id="content-wrapper">
+
+            <section class="container col-12 mt-4">
+                <p class="text-center h1 text-primary">Ghi Nhận Thành Tích</p>
+                <div class="container col-8 mt-5">
+                    <div class=" container col-8 h6 clearfix">
+                        <p class="font-weight-normal float-left">Mã nhân viên : </p>
+                        <p class="ml-sm-5 font-weight-bold float-left" th:text="${staffs.idStaffs}"></p>
+                    </div>
+                    <div class=" container col-8 h6 clearfix">
+                        <p class="font-weight-normal float-left">Tên nhân viên : </p>
+                        <p class="ml-sm-5 font-weight-bold float-left" th:text="${staffs.staffsName}"></p>
+                    </div>
+                    <hr class="col-8">
+                    <div class="col-8 container mt-sm-4">
+                        <form th:object="${records}" th:action = "${action}" method="POST">
+                            <div class="form-group">
+                                <div class="form-inline">
+                                    <label class="h6 font-weight-normal">Loại : </label>
+                                    <div class="custom-control custom-radio ml-lg-5">
+                                        <input type="radio" class="custom-control-input" id="defaultChecked2"
+                                            name="type_records" value="1" checked>
+                                        <label class="custom-control-label h6 font-weight-normal" for="defaultChecked2">Thành tích</label>
+                                    </div>
+                                    <div class="custom-control custom-radio ml-lg-5">
+                                        <input type="radio" class="custom-control-input" id="defaultChecked"
+                                            name="type_records" value="0">
+                                        <label class="custom-control-label h6 font-weight-normal" for="defaultChecked">Kỷ luật</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="h6 font-weight-normal" for="reason">Lý do : </label>
+                                <textarea th:field="*{reason}" class="form-control" id="reason"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger col-12">Gửi đánh giá</button>
+                            <a  class="btn btn-light col-12 mt-sm-3" th:href="${url_records}" role="button">Trở về</a>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <footer th:replace="common/layout :: footer"> </footer>
+    </div>
+    <th:block th:replace="common/scriptsource :: script"></th:block>
+</body>
+
+</html>

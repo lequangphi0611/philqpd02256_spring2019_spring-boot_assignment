@@ -1,6 +1,7 @@
 package com.quangphi.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -30,6 +31,7 @@ public class DepartmentDTO {
 		DepartmentDTO departmentDTO = parseDepartmentDTOWidthOutFetchStaffs(department);
 		department.getStaffs()
 				.forEach(items -> departmentDTO.getAllStaffs().add(StaffsDTO.parseStaffsDTO(items)));
+		Collections.sort(departmentDTO.allStaffs);
 		return departmentDTO;
 	}
 	

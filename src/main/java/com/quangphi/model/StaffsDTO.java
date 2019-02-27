@@ -1,10 +1,10 @@
 package com.quangphi.model;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
-
-import javax.validation.constraints.Null;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,13 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quangphi.entity.Staffs;
 import com.quangphi.service.impl.StorageServiceImpl;
 
-public class StaffsDTO {
+public class StaffsDTO implements Comparable<StaffsDTO> {
+
+	public static final int LEVEL_MAX = 10;
+	public static final int LEVEL_MIN = 1;
 
 	private String idStaffs;
 	private String staffsName;
 	private Date birthday;
 	private Gender gender = Gender.MALE;
-	@Null
 	private MultipartFile photo;
 	private String email;
 	private String phone;
@@ -26,6 +28,12 @@ public class StaffsDTO {
 	private String notes;
 
 	private DepartmentDTO department;
+
+	private List<RecordsDTO> records = new ArrayList<>();
+
+	enum AssessValue {
+		GOOD, ORDINARY, BAD;
+	}
 
 	public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
 		StaffsDTO staffsDTO = new StaffsDTO();
@@ -39,6 +47,11 @@ public class StaffsDTO {
 		staffsDTO.setSalary(staffsEntity.getSalary());
 		staffsDTO.setNotes(staffsEntity.getNotes());
 		staffsDTO.setDepartment(DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(staffsEntity.getDepartment()));
+		List<RecordsDTO> records = new ArrayList<>();
+		staffsEntity.getRecords().forEach((recordsEntity) -> {
+			records.add(RecordsDTO.parseRecordsDTO(recordsEntity));
+		});
+		staffsDTO.setRecords(records);
 		return staffsDTO;
 	}
 
@@ -141,6 +154,14 @@ public class StaffsDTO {
 		this.department = department;
 	}
 
+	public List<RecordsDTO> getRecords() {
+		return records;
+	}
+
+	public void setRecords(List<RecordsDTO> records) {
+		this.records = records;
+	}
+
 	public Staffs toStaffsEntity() {
 		Staffs staffEntity = new Staffs();
 		staffEntity.setIdStaffs(this.idStaffs);
@@ -166,4 +187,37 @@ public class StaffsDTO {
 		return numberFormat.format(this.salary);
 	}
 
+	public int getLevel() {
+		int level = StaffsDTO.LEVEL_MIN;
+		for (RecordsDTO items : this.records) {
+			if (items.getType() && level < StaffsDTO.LEVEL_MAX) {
+				level++;
+			} else if (level > StaffsDTO.LEVEL_MIN) {
+				level--;
+			}
+		}
+		return level;
+	}
+
+	public AssessValue getAssessValue() {
+		int level = getLevel();
+		if (level < 5) {
+			return AssessValue.BAD;
+		} else if (level < 8) {
+			return AssessValue.ORDINARY;
+		}
+		return AssessValue.GOOD;
+	}
+
+	@Override
+	public int compareTo(StaffsDTO o) {
+		int level_this = this.getLevel();
+		int level_o = o.getLevel();
+		if (level_this > level_o) {
+			return -1;
+		} else if (level_this < level_o) {
+			return 1;
+		}
+		return 0;
+	}
 }
