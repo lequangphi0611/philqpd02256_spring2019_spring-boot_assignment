@@ -86,7 +86,7 @@ public class DepartmentController {
 		DepartmentDTO departmentDTO = departmentService.getByIdFetchStaffs(idDepartment);
 		model.addAttribute("department", departmentDTO);
 		model.addAttribute("allStaffs", departmentDTO.getAllStaffs());
-		model.addAttribute("urlDelStaffs", "/staffs/delete/department/" + idDepartment + "/");
+		model.addAttribute("urlDelStaffs", "/staffs/delete/" + idDepartment + "/");
 		model.addAttribute("urlEdit", "/department/" + idDepartment + "/staffs/");
 		return "department/department-infor";
 	}

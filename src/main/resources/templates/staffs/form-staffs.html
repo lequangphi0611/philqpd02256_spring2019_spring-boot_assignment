@@ -5,7 +5,7 @@
 	<section>
 		<div class="container col-6 mt-5" th:fragment="form_staffs">
 					<div class="container col-10" >
-						<form th:action="${action}" th:object="${staffs}" method="post">
+						<form th:action="${action}" th:object="${staffs}" enctype="multipart/form-data" method="post">
 							<div class="form-group">
 								<label for="idStaffs">Mã nhân viên :</label>
 								<input th:field="*{idStaffs}" class="form-control" id="idStaffs" th:readonly="${staffs.idStaffs != null and !staffs.idStaffs.isEmpty()}"/>
@@ -51,6 +51,10 @@
 								<label for="salary">Lương : </label>
 								<input th:field="*{salary}" class="form-control" id="salary"/>
 							</div>
+							<div class="form-group">
+							    <label for="exampleFormControlFile1">Chọn ảnh : </label>
+							    <input th:field="*{photo}" type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
+							  </div>
 							<div class="form-group">
 								<label for="notes">Chú thích : </label>
 								<textarea th:field="*{notes}" class="form-control" id="notes"></textarea>

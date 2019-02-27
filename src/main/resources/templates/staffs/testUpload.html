@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/head :: head"></head>
+
+<body id="page-top">
+	<form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+    <p>Custom file:</p>
+    <div class="custom-file mb-3">
+      <input type="file" id="customFile" name="filename">
+     <button type="submit">submit</button>
+    </div>
+    </form>
+<th:block th:replace="common/scriptsource :: script"></th:block>
+
+</body>
+
+</html>

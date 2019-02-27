@@ -1,20 +1,26 @@
 package com.quangphi.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
-import com.quangphi.entity.Department;
-import com.quangphi.model.DepartmentDTO;
-import com.quangphi.model.Gender;
-import com.quangphi.model.StaffsDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.quangphi.repository.StaffsRepository;
 import com.quangphi.service.DepartmentService;
 import com.quangphi.service.StaffsService;
 
-@RestController
-//@Controller
+//@RestController
+@Controller
 public class TestController {
 	
 	@Autowired
@@ -26,28 +32,24 @@ public class TestController {
 	@Autowired
 	private StaffsRepository staffsRepository;
 	
-	@GetMapping(value = "/test")
-	public StaffsDTO getMethodName() {
-		StaffsDTO staffs = new StaffsDTO();
-		staffs.setIdStaffs("ST010");
-		staffs.setStaffsName("Quang Phi");
-		staffs.setGender(Gender.MALE);
-		staffs.setPhone("0773927601");
-		staffs.setEmail("SojCute@gmail.com");
-		staffs.setNotes("Không có mô tả");
-		staffs.setPhoto("default.jpg");
-		staffs.setSalary(10888888L);
-		staffs.setDepartment(new DepartmentDTO("PB001", null));
-		return staffsService.addStaffs(staffs);
+	@GetMapping("/upload")
+	public String upload() {
+		return "staffs/testUpload";
 	}
 	
-	@GetMapping("/testIterable")
+	String path = System.getProperty("user.dir") +"/src/main/resources/static/img/" ;
+	
+	@PostMapping("/upload")
 	@ResponseBody
-	public String getALl() {
-		staffsRepository.findAllStaffsByDepartmentAndIdStaffsContaining(new Department("PB001",null), "S")
-			.forEach(System.out::println)
-		;
-		return "ddddddd";
+	public String upload( @RequestParam MultipartFile filename) throws IOException {
+		
+		return parse(filename.getBytes());
+	}
+	
+	public String parse(byte[] bytes) {
+		
+		InputStream in = new ByteArrayInputStream(bytes);
+		return "";
 	}
 
 }

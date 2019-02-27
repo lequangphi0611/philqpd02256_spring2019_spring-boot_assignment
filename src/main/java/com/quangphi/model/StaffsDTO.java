@@ -4,44 +4,49 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.validation.constraints.Null;
+
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.quangphi.entity.Staffs;
+import com.quangphi.service.impl.StorageServiceImpl;
 
 public class StaffsDTO {
-	
+
 	private String idStaffs;
-    private String staffsName;
-    private Date birthday;
-    private Gender gender = Gender.MALE;
-    private String photo;
-    private String email;
-    private String phone;
-    private Long salary = 0L;
-    private String notes;
-    
-    private DepartmentDTO department;
-    
-    public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
-    	StaffsDTO staffsDTO = new StaffsDTO();
-    	staffsDTO.setIdStaffs(staffsEntity.getIdStaffs());
-    	staffsDTO.setStaffsName(staffsEntity.getStaffsName());
-    	staffsDTO.setBirthday(staffsEntity.getBirthDay());
-    	staffsDTO.setGender(staffsEntity.isGender() ? Gender.MALE : Gender.FEMALE);
-    	staffsDTO.setPhoto(staffsEntity.getPhoto());
-    	staffsDTO.setEmail(staffsEntity.getEmail());
-    	staffsDTO.setPhone(staffsEntity.getPhone());
-    	staffsDTO.setSalary(staffsEntity.getSalary());
-    	staffsDTO.setNotes(staffsEntity.getNotes());
-    	staffsDTO.setDepartment(DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(staffsEntity.getDepartment()));
-    	return staffsDTO;
-    }
-    
-    public StaffsDTO() {
+	private String staffsName;
+	private Date birthday;
+	private Gender gender = Gender.MALE;
+	@Null
+	private MultipartFile photo;
+	private String email;
+	private String phone;
+	private Long salary = 0L;
+	private String notes;
+
+	private DepartmentDTO department;
+
+	public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
+		StaffsDTO staffsDTO = new StaffsDTO();
+		staffsDTO.setIdStaffs(staffsEntity.getIdStaffs());
+		staffsDTO.setStaffsName(staffsEntity.getStaffsName());
+		staffsDTO.setBirthday(staffsEntity.getBirthDay());
+		staffsDTO.setGender(staffsEntity.isGender() ? Gender.MALE : Gender.FEMALE);
+		staffsDTO.setPhoto(new StorageServiceImpl().getMultipartFileTo(staffsEntity.getPhoto()));
+		staffsDTO.setEmail(staffsEntity.getEmail());
+		staffsDTO.setPhone(staffsEntity.getPhone());
+		staffsDTO.setSalary(staffsEntity.getSalary());
+		staffsDTO.setNotes(staffsEntity.getNotes());
+		staffsDTO.setDepartment(DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(staffsEntity.getDepartment()));
+		return staffsDTO;
 	}
 
-	public StaffsDTO(String idStaffs, String staffsName, Date birthday, Gender gender, String photo, String email,
-			String phone, Long salary, String notes, DepartmentDTO department) {
+	public StaffsDTO() {
+	}
+
+	public StaffsDTO(String idStaffs, String staffsName, Date birthday, Gender gender, MultipartFile photo,
+			String email, String phone, Long salary, String notes, DepartmentDTO department) {
 		super();
 		this.idStaffs = idStaffs;
 		this.staffsName = staffsName;
@@ -70,12 +75,12 @@ public class StaffsDTO {
 	public void setStaffsName(String staffsName) {
 		this.staffsName = staffsName;
 	}
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public Date getBirthday() {
 		return birthday;
 	}
-	
+
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
@@ -88,11 +93,11 @@ public class StaffsDTO {
 		this.gender = gender;
 	}
 
-	public String getPhoto() {
+	public MultipartFile getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(String photo) {
+	public void setPhoto(MultipartFile photo) {
 		this.photo = photo;
 	}
 
@@ -127,22 +132,26 @@ public class StaffsDTO {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-	
+
 	public DepartmentDTO getDepartment() {
 		return department;
 	}
-	
+
 	public void setDepartment(DepartmentDTO department) {
 		this.department = department;
 	}
-   
+
 	public Staffs toStaffsEntity() {
 		Staffs staffEntity = new Staffs();
 		staffEntity.setIdStaffs(this.idStaffs);
 		staffEntity.setStaffsName(this.staffsName);
 		staffEntity.setBirthDay(this.birthday);
 		staffEntity.setGender(this.gender == Gender.MALE);
-		staffEntity.setPhoto(this.photo);
+		if (this.photo.getOriginalFilename() == null || this.photo.getOriginalFilename().isEmpty()) {
+			staffEntity.setPhoto(staffEntity.isGender() ? "Male.jpg" : "Female.jpg");
+		} else {
+			staffEntity.setPhoto(this.photo.getOriginalFilename());
+		}
 		staffEntity.setEmail(this.email);
 		staffEntity.setPhone(this.phone);
 		staffEntity.setSalary(this.salary);
@@ -150,11 +159,11 @@ public class StaffsDTO {
 		staffEntity.setDepartment(this.department.toDepartment());
 		return staffEntity;
 	}
-	
+
 	public String getSalaryCurrency() {
-		Locale locale= new Locale("vi","VN");
+		Locale locale = new Locale("vi", "VN");
 		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
 		return numberFormat.format(this.salary);
 	}
-	
+
 }

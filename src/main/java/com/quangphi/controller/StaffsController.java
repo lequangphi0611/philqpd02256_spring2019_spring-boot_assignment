@@ -3,6 +3,8 @@ package com.quangphi.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.annotation.MultipartConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.quangphi.model.DepartmentDTO;
 import com.quangphi.model.Gender;
 import com.quangphi.model.StaffsDTO;
 import com.quangphi.service.DepartmentService;
 import com.quangphi.service.StaffsService;
+import com.quangphi.service.StorageService;
 
 @Controller
 @RequestMapping("/staffs")
@@ -28,6 +32,9 @@ public class StaffsController {
 
 	@Autowired
 	private DepartmentService departmentService;
+	
+	@Autowired
+	private StorageService storageService;
 
 	Map<String, Object> attributeURLEditAndDel = new HashMap<String, Object>() {
 		{
@@ -66,6 +73,7 @@ public class StaffsController {
 
 	public String addStaffs(StaffsDTO staffsDTO, ModelMap model, String gender, String idDepartment, String requestURL,
 			String action) {
+		storageService.writeFile(staffsDTO.getPhoto());
 		staffsService.addStaffs(getStaffTo(staffsDTO, gender, idDepartment));
 		initForm(model, new StaffsDTO(), requestURL, action);
 		return "staffs/add-or-update-staffs";
@@ -108,13 +116,16 @@ public class StaffsController {
 	public String edit(ModelMap model, @PathVariable String idStaffs) {
 		String requestURL = "/staffs";
 		String action = "/staffs/edit";
-		initForm(model, staffsService.getByID(idStaffs), requestURL, action);
+		StaffsDTO staffs = staffsService.getByID(idStaffs);
+		System.err.println(staffs.getPhoto().getOriginalFilename());
+		initForm(model, staffs, requestURL, action);
 		return "staffs/add-or-update-staffs";
 	}
 
 	@PostMapping("/edit")
 	public String edit(@ModelAttribute StaffsDTO staffs, ModelMap model, @RequestParam String gender,
 			@RequestParam String idDepartment) {
+		storageService.writeFile(staffs.getPhoto());
 		staffsService.updateStaffs(getStaffTo(staffs, gender, idDepartment));
 		return "redirect:/staffs";
 	}
@@ -122,11 +133,12 @@ public class StaffsController {
 	@PostMapping("/edit/department")
 	public String editOfDepartment(@ModelAttribute StaffsDTO staffs, ModelMap model, @RequestParam String gender,
 			@RequestParam String idDepartment) {
+		storageService.writeFile(staffs.getPhoto());
 		staffsService.updateStaffs(getStaffTo(staffs, gender, idDepartment));
 		return "redirect:/department/infor/" + idDepartment;
 	}
 
-	@GetMapping("/delete/department/{idDepartment}/{idStaffs}")
+	@GetMapping("/delete/{idDepartment}/{idStaffs}")
 	public String delStaffAndReturnDepartmentPage(ModelMap model, @PathVariable String idStaffs,
 			@PathVariable String idDepartment) {
 		staffsService.delete(idStaffs);
@@ -141,8 +153,7 @@ public class StaffsController {
 
 	@GetMapping("/search")
 	public String search(@RequestParam(required = false) String keyword, ModelMap model) {
-		if (keyword == null || keyword.isEmpty())
-			return "redirect:/staffs";
+		if (keyword == null || keyword.isEmpty()) return "redirect:/staffs";
 		model.addAllAttributes(new HashMap<String, Object>() {
 			{
 				put("allStaffs", staffsService.findStaffsByKeyword(keyword));
