@@ -3,6 +3,8 @@ package com.quangphi.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import com.quangphi.model.RecordsDTO;
 import com.quangphi.model.StaffsDTO;
 import com.quangphi.service.RecordsService;
@@ -11,6 +13,7 @@ import com.quangphi.service.StaffsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,8 +78,13 @@ public class RecordsController {
     }
 
     @PostMapping(value = "/{idStaffs}")
-    public String feedbackStaffsRequest(@ModelAttribute RecordsDTO recordsDTO, @RequestParam int type_records,
-            @PathVariable String idStaffs) {
+    public String feedbackStaffsRequest(@ModelAttribute("records") @Valid RecordsDTO recordsDTO,
+            BindingResult bindingResult, @RequestParam int type_records, @PathVariable String idStaffs,
+            ModelMap model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("reason_error", "Vui lòng không để trống lý do ");
+            return feedbackStaffsRequest(model, idStaffs);
+        }
         StaffsDTO staffs = staffsService.getByID(idStaffs);
         recordsDTO.setType(type_records == 1);
         recordsDTO.setStaffsDTO(staffs);
@@ -85,8 +93,13 @@ public class RecordsController {
     }
 
     @PostMapping(value = "/{idDepartment}/{idStaffs}")
-    public String feedbackDepartmentRequest(@ModelAttribute RecordsDTO recordsDTO, @RequestParam int type_records,
-            @PathVariable String idDepartment, @PathVariable String idStaffs) {
+    public String feedbackDepartmentRequest(@ModelAttribute("records") @Valid RecordsDTO recordsDTO,
+            BindingResult bindingResult, @RequestParam int type_records, @PathVariable String idDepartment,
+            @PathVariable String idStaffs, ModelMap model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("reason_error", "Vui lòng không để trống lý do ");
+            return feedbackDepartmentRequest(model, idDepartment, idStaffs);
+        }
         StaffsDTO staffs = staffsService.getByID(idStaffs);
         recordsDTO.setType(type_records == 1);
         recordsDTO.setStaffsDTO(staffs);

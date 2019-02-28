@@ -41,6 +41,8 @@
                             <div class="form-group">
                                 <label class="h6 font-weight-normal" for="reason">Lý do : </label>
                                 <textarea th:field="*{reason}" class="form-control" id="reason"></textarea>
+                                <small th:if="${reason_error}" th:text = "${reason_error}"
+							class="font-italic text-danger"></small>
                             </div>
                             <button type="submit" class="btn btn-danger col-12">Gửi đánh giá</button>
                             <a  class="btn btn-light col-12 mt-sm-3" th:href="${url_records}" role="button">Trở về</a>

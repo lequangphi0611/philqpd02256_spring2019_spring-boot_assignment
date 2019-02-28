@@ -2,11 +2,14 @@ package com.quangphi.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.quangphi.entity.Records;
 
 public class RecordsDTO implements Comparable<RecordsDTO> {
 
-    private boolean type;
+    private boolean type = true;
+    @NotEmpty
     private String reason;
     private Date date;
 

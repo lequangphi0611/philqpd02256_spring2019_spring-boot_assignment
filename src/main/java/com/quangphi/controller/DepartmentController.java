@@ -149,6 +149,7 @@ public class DepartmentController {
 		String requestURL = "/department/infor/" + idDepartment;
 		String action = "/staffs/edit/department";
 		staffsController.initForm(model, staffsService.getByID(idStaffs), requestURL, action);
+		model.addAttribute("edit", true);
 		return "staffs/add-or-update-staffs";
 	}
 

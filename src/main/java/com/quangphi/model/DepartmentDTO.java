@@ -8,9 +8,12 @@ import javax.validation.constraints.NotEmpty;
 
 import com.quangphi.entity.Department;
 
+import org.hibernate.validator.constraints.Length;
+
 public class DepartmentDTO {
 
 	@NotEmpty(message = "Không được để trống mã phòng ban")
+	@Length(min = 5,max = 10, message = "Mã phòng ban có ít nhất 5 ký tự và ít hơn 10 ký tự")
 	private String idDepartment;
 	@NotEmpty(message = "Không được để trống tên phòng ban")
 	private String departmentName;

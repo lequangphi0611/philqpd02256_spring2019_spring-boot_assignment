@@ -3,6 +3,9 @@ package com.quangphi.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
+import com.quangphi.exception.ExistsException;
 import com.quangphi.model.DepartmentDTO;
 import com.quangphi.model.Gender;
 import com.quangphi.model.RecordsDTO;
@@ -14,6 +17,7 @@ import com.quangphi.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +34,7 @@ public class StaffsController {
 
 	@Autowired
 	private DepartmentService departmentService;
-	
+
 	@Autowired
 	private StorageService storageService;
 
@@ -38,7 +42,7 @@ public class StaffsController {
 		{
 			put("urlEdit", "/staffs/edit/");
 			put("urlDelStaffs", "/staffs/delete/");
-			put("urlRecords","/records/");
+			put("urlRecords", "/records/");
 		}
 	};
 
@@ -80,8 +84,14 @@ public class StaffsController {
 	public String addStaffs(StaffsDTO staffsDTO, ModelMap model, String gender, String idDepartment, String requestURL,
 			String action) {
 		storageService.writeFile(staffsDTO.getPhoto());
-		staffsService.addStaffs(getStaffTo(staffsDTO, gender, idDepartment));
-		initForm(model, new StaffsDTO(), requestURL, action);
+		StaffsDTO staffsAttribute = new StaffsDTO();
+		try{
+			staffsService.addStaffs(getStaffTo(staffsDTO, gender, idDepartment));
+		}catch (ExistsException ex) {
+			model.addAttribute("id_error", "Mã nhân viên đã tồn tại");
+			staffsAttribute = staffsDTO;
+		}
+		initForm(model, staffsAttribute, requestURL, action);
 		return "staffs/add-or-update-staffs";
 	}
 
@@ -95,10 +105,14 @@ public class StaffsController {
 	}
 
 	@PostMapping("/add/department")
-	public String addOfDepartment(@ModelAttribute StaffsDTO staffs, ModelMap model, @RequestParam String gender,
-			@RequestParam String idDepartment) {
+	public String addOfDepartment(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult, ModelMap model,
+			@RequestParam String gender, @RequestParam String idDepartment) {
 		String requestURL = "/department/infor/" + idDepartment;
 		String action = "/staffs/add/department";
+		if (bindingResult.hasErrors()) {
+			initForm(model, staffs, requestURL, action);
+			return "staffs/add-or-update-staffs";
+		}
 		return addStaffs(staffs, model, gender, idDepartment, requestURL, action);
 	}
 
@@ -111,10 +125,14 @@ public class StaffsController {
 	}
 
 	@PostMapping("/add")
-	public String add(@ModelAttribute StaffsDTO staffs, ModelMap model, @RequestParam String gender,
-			@RequestParam String idDepartment) {
+	public String add(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult, ModelMap model,
+			@RequestParam String gender, @RequestParam String idDepartment) {
 		String requestURL = "/staffs";
 		String action = "/staffs/add";
+		if (bindingResult.hasErrors()) {
+			initForm(model, staffs, requestURL, action);
+			return "staffs/add-or-update-staffs";
+		}
 		return addStaffs(staffs, model, gender, idDepartment, requestURL, action);
 	}
 
@@ -123,22 +141,30 @@ public class StaffsController {
 		String requestURL = "/staffs";
 		String action = "/staffs/edit";
 		StaffsDTO staffs = staffsService.getByID(idStaffs);
-		System.err.println(staffs.getPhoto().getOriginalFilename());
 		initForm(model, staffs, requestURL, action);
+		model.addAttribute("edit", true);
 		return "staffs/add-or-update-staffs";
 	}
 
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute StaffsDTO staffs, ModelMap model, @RequestParam String gender,
-			@RequestParam String idDepartment) {
+	public String edit(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult, ModelMap model,
+			@RequestParam String gender, @RequestParam String idDepartment) {
+		if (bindingResult.hasErrors()) {
+			initForm(model, staffs, "/staffs", "/staffs/edit");
+			return "staffs/add-or-update-staffs";
+		}
 		storageService.writeFile(staffs.getPhoto());
 		staffsService.updateStaffs(getStaffTo(staffs, gender, idDepartment));
 		return "redirect:/staffs";
 	}
 
 	@PostMapping("/edit/department")
-	public String editOfDepartment(@ModelAttribute StaffsDTO staffs, ModelMap model, @RequestParam String gender,
-			@RequestParam String idDepartment) {
+	public String editOfDepartment(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult, ModelMap model,
+			@RequestParam String gender, @RequestParam String idDepartment) {
+		if (bindingResult.hasErrors()) {
+			initForm(model, staffs, "/department/infor/" + idDepartment, "/staffs/edit/department");
+			return "staffs/add-or-update-staffs";
+		}
 		storageService.writeFile(staffs.getPhoto());
 		staffsService.updateStaffs(getStaffTo(staffs, gender, idDepartment));
 		return "redirect:/department/infor/" + idDepartment;
@@ -159,7 +185,8 @@ public class StaffsController {
 
 	@GetMapping("/search")
 	public String search(@RequestParam(required = false) String keyword, ModelMap model) {
-		if (keyword == null || keyword.isEmpty()) return "redirect:/staffs";
+		if (keyword == null || keyword.isEmpty())
+			return "redirect:/staffs";
 		model.addAllAttributes(new HashMap<String, Object>() {
 			{
 				put("allStaffs", staffsService.findStaffsByKeyword(keyword));

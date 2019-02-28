@@ -18,11 +18,11 @@ public class Application {
 	public FilterRegistrationBean<AuthenticateFilter> authenticateFilter() {
 		FilterRegistrationBean<AuthenticateFilter> registrationBean = new FilterRegistrationBean<>();
 		registrationBean.setFilter(new AuthenticateFilter());
-		// registrationBean.addUrlPatterns("/index.html");
-		// registrationBean.addUrlPatterns("/department/*");
-		// registrationBean.addUrlPatterns("/staffs/*");
+		registrationBean.addUrlPatterns("/index.html");
+		registrationBean.addUrlPatterns("/department/*");
+		registrationBean.addUrlPatterns("/staffs/*");
 		registrationBean.addUrlPatterns("/account/*");
-		// registrationBean.addUrlPatterns("/records/*");
+		registrationBean.addUrlPatterns("/records/*");
 		return registrationBean;
 	}
 

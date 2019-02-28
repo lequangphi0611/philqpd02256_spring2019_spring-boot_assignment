@@ -10,16 +10,23 @@
 				<form th:action="${action}" th:object="${staffs}" enctype="multipart/form-data" method="post">
 					<div class="form-group">
 						<label for="idStaffs">Mã nhân viên :</label>
-						<input th:field="*{idStaffs}" class="form-control" id="idStaffs"
-							th:readonly="${staffs.idStaffs != null and !staffs.idStaffs.isEmpty()}" />
+						<input th:field="*{idStaffs}" class="form-control" id="idStaffs" th:readonly="${edit}" />
+						<small th:if="${#fields.hasErrors('idStaffs')}" th:errors="*{idStaffs}"
+							class="font-italic text-danger"></small>
+							<small th:if="${id_error}" th:text = "${id_error}"
+							class="font-italic text-danger"></small>
 					</div>
 					<div class="form-group">
 						<label for="staffsName">Tên nhân viên : </label>
 						<input th:field="*{staffsName}" class="form-control" id="staffsName" />
+						<small th:if="${#fields.hasErrors('staffsName')}" th:errors="*{staffsName}"
+							class="font-italic text-danger"></small>
 					</div>
 					<div class="form-group">
 						<label for="birthday">Ngày sinh</label>
 						<input th:field="*{birthday}" type="date" class="form-control" id="birthday" />
+						<small th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}"
+							class="font-italic text-danger"></small>
 					</div>
 					<div class="form-group">
 						<div class="form-inline">
@@ -48,10 +55,14 @@
 					<div class="form-group">
 						<label for="email">Email : </label>
 						<input th:field="*{email}" class="form-control" id="email" />
+						<small th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+							class="font-italic text-danger"></small>
 					</div>
 					<div class="form-group">
 						<label for="salary">Số điện thoại : </label>
 						<input th:field="*{phone}" class="form-control" id="salary" />
+						<small th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
+							class="font-italic text-danger"></small>
 					</div>
 					<div class="form-group">
 						<label for="salary">Lương : </label>

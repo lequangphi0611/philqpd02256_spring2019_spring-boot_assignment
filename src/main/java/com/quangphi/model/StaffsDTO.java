@@ -7,24 +7,47 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 
 import com.quangphi.entity.Staffs;
 import com.quangphi.service.impl.StorageServiceImpl;
+
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 public class StaffsDTO implements Comparable<StaffsDTO> {
 
 	public static final int LEVEL_MAX = 10;
 	public static final int LEVEL_MIN = 1;
 
+	@NotEmpty(message = "Không được để trống mã nhân viên")
+	@Length(min = 5, max = 10, message = "Mã nhân viên có ít nhất 5 ký tự và ít hơn 10 ký tự")
 	private String idStaffs;
+
+	@NotEmpty(message = "Không được để trống tên nhân viên ")
 	private String staffsName;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Past(message = "Ngày sinh phải trước ngày hiện tại")
 	private Date birthday;
+
 	private Gender gender = Gender.MALE;
+
 	private MultipartFile photo;
+
+	@NotEmpty(message = "Không để trống email")
+	@Pattern(regexp="\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b", 
+		message = "Email sai định dạng (vd : example@gmail.com)")
 	private String email;
+
+	@NotEmpty(message = "Không được để trống số điện thoại")
+	@Length(max = 10, min = 10, message = "Số điện thoại phải là 10 ký tự")
+	@Pattern(regexp = "\\d+", message="Số điện thoại phải là số")
 	private String phone;
+	
 	private Long salary = 0L;
 	private String notes;
 
@@ -87,7 +110,6 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 		this.staffsName = staffsName;
 	}
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public Date getBirthday() {
 		return birthday;
 	}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/head :: head"></head>
+
+<body>
+
+    <section>
+        <table th:fragment="table-data" class="table table=sm table-bordered" width="100%">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Hình Ảnh</th>
+                    <th>Tên Nhân Viên</th>
+                    <th>Phòng Ban</th>
+                    <th>Tổng Thành Tích</th>
+                    <th>Tổng Kỷ Luật</th>
+                    <th>Điểm Thưởng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="staffs,i : ${allStaffs}">
+                    <tr>
+                        <td th:text="${i.index + 1}" class="align-middle" scope="row"></td>
+                        <td class="align-middle">
+                            <a th:href="@{/staffs/} + ${staffs.idStaffs}" class="text-dark">
+                                <img th:src="@{/img/} + ${staffs.photo.getOriginalFilename()}"
+                                    th:alt="@{/img/} + ${staffs.photo.getOriginalFilename()}"
+                                    style="width:80px;height:auto;" class="rounded">
+                            </a>
+                        </td>
+                        <td class="align-middle">
+                            <a th:text="${staffs.staffsName}" th:href="@{/staffs/} + ${staffs.idStaffs}"
+                                class="text-dark"></a>
+                        </td>
+                        <td class="align-middle" th:text="${staffs.department.departmentName}">
+
+                        </td>
+                        <td th:text="${staffs.getAchievement()}" class="align-middle">
+                        </td>
+                        <td th:text="${staffs.getDiscipline()}" class="align-middle"></td>
+                        <td th:text="${staffs.getAchievement() - staffs.getDiscipline()}" class="align-middle"></td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </section>
+
+    <th:block th:replace="common/scriptsource :: script"></th:block>
+</body>
+
+</html>
