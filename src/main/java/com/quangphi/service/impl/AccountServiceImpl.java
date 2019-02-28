@@ -92,4 +92,9 @@ public class AccountServiceImpl implements AccountService {
     public boolean existsByIDAccount(String username) {
         return accountRepository.existsById(username);
     }
+
+    @Override
+    public long count() {
+        return accountRepository.count();
+    }
 }

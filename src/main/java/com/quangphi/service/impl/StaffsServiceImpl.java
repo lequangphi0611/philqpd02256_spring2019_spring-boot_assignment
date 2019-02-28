@@ -126,4 +126,9 @@ public class StaffsServiceImpl implements StaffsService {
 		return staffsRepository.countStaffsByDepartment(department.toDepartment());
 	}
 
+	@Override
+	public long count() {
+		return staffsRepository.count();
+	}
+
 }

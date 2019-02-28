@@ -25,7 +25,7 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 
-	@GetMapping(value="/home")
+	@GetMapping
 	public String home(ModelMap model) {
 		model.addAttribute("status", true);
 		model.addAttribute("accountDTO", new AccountDTO());
@@ -35,7 +35,7 @@ public class AccountController {
 
 	@GetMapping("/action")
 	public String getHome() {
-		return "redirect:/account/home";
+		return "redirect:/account";
 	}
 
 	@PostMapping("/action")
@@ -81,13 +81,13 @@ public class AccountController {
 	@GetMapping("/delete/{username}")
 	public String deleteAccount(@PathVariable String username) {
 		accountService.delete(username);
-		return "redirect:/account/home";
+		return "redirect:/account";
 	}
 
 	@GetMapping("/search")
 	public String search(@RequestParam(required=false) String keyword, ModelMap model) {
 		if (keyword == null || keyword.isEmpty()) {
-			return "redirect:/account/home";
+			return "redirect:/account";
 		}
 		model.addAttribute("allAccounts", accountService.getByUsernameOrFullnameContaining(keyword));
 		model.addAttribute("accountDTO", new AccountDTO());

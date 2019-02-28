@@ -20,4 +20,6 @@ public interface DepartmentService {
     
     Iterable<DepartmentDTO> getAllDepartmentWithOutFetchStaffs();
 
+    long count();
+
 }

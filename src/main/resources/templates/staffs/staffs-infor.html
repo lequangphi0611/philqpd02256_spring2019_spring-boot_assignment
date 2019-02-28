@@ -13,8 +13,8 @@
                 <div class="col-8 ml-lg-5">
                     <div class="clearfix">
                         <div class="mr-5 float-left">
-                            <img src="/img/jisoo.jpg" alt="" class="img-thumbnail img-fluid"
-                                style="height:200px;width:auto;" />
+                            <img th:src="@{/img/} + ${staffs.photo.getOriginalFilename()}" alt=""
+                                class="img-thumbnail img-fluid" style="height:200px;width:auto;" />
                         </div>
                         <div class="font-weight-normal h6 float-left">
                             <table class="spacing-table">
@@ -32,16 +32,35 @@
                                     <td>Đánh giá </td>
                                     <td> : </td>
                                     <td class="font-weight-bold">
-                                        <b th:text="${staffs.getAchievement()}" class="font-weight-normal"></b> thành tích <b th:text="${staffs.getDiscipline()}" class="font-weight-normal"></b> kỷ luật
+                                        <b th:text="${staffs.getAchievement()}" class="mr-sm-1"></b> thành tích <b
+                                            th:text="${staffs.getDiscipline()}" class="mr-sm-1 ml-sm-1"></b> kỷ luật
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a th:href="@{/records/infor/{idStaffs}(idStaffs=${staffs.idStaffs})}"
+                                            class="btn btn-primary col-12"><i
+                                                class="fas fa-comment-alt mr-sm-2"></i>Đánh giá</a>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                 </div>
-                <hr class="col-10 mt-sm-4 mb-sm-2">
-                <div class="text-info h4 ml-sm-2 mt-lg-4">Danh sách đánh giá : </div>
-                <section th:replace="records/records-data :: records-data"></section>
+                <a th:href="@{/staffs}" class="btn btn-primary mt-5 ml-sm-3"><i class="fas fa-home"></i>Xem tất cả
+                    nhân
+                    viên</a>
+                
+
+                <div class="card mb-3 mt-3">
+                    <div class="card-header">
+                            <i class="fas fa-table"></i> Ghi Nhận : </div>
+                    <div class="card-body">
+                        <section th:replace="records/records-data :: records-data"></section>
+                    </div>
+
+                </div>
+                
             </section>
         </div>
         <footer th:replace="common/layout :: footer"> </footer>

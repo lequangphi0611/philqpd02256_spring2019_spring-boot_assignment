@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <body>
 	<section th:fragment="staffs-data">
-		<div class="mt-4">
+		<div>
 			<table class="table table-sm table-bordered table-responsive-sm">
 				<thead>
 					<tr>
@@ -38,11 +39,22 @@
 					<tr th:each="staffs,i : ${allStaffs}">
 						<td class="align-middle" scope="row" th:text="${i.index + 1}"></td>
 						<td class="align-middle">
-							<img class="rounded" style="width:80px;height:auto;" th:src="${'/img/'} + ${staffs.photo.getOriginalFilename()}" />
+							<a th:href="@{/staffs/} + ${staffs.idStaffs}" th:class="text-dark">
+								<img class="rounded" style="width:80px;height:auto;"
+									th:src="${'/img/'} + ${staffs.photo.getOriginalFilename()}"
+									th:alt="${'/img/'} + ${staffs.photo.getOriginalFilename()}" />
+							</a>
 						</td>
-						<td class="align-middle" th:text="${staffs.idStaffs}"></td>
-						<td class="align-middle" th:text="${staffs.staffsName}"></td>
-						<td class="align-middle" th:text="${#dates.format(staffs.birthday,'dd/MM/yyyy')}"></td>
+						<td class="align-middle">
+							<a th:href="@{/staffs/} + ${staffs.idStaffs}" th:text="${staffs.idStaffs}"
+								th:class="text-dark"></a>
+						</td>
+						<td class="align-middle">
+							<a th:href="@{/staffs/} + ${staffs.idStaffs}" th:text="${staffs.staffsName}"
+								th:class="text-dark"></a>
+						</td>
+						<td class="align-middle" th:text="${#dates.format(staffs.birthday,'dd/MM/yyyy')}">
+						</td>
 						<th:block th:switch="${staffs.gender.toString()}">
 							<td class="align-middle" th:case="'MALE'">Nam</td>
 							<td class="align-middle" th:case="'FEMALE'">Nữ</td>

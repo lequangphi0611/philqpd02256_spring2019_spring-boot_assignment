@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.quangphi.model.DepartmentDTO;
 import com.quangphi.model.Gender;
+import com.quangphi.model.RecordsDTO;
 import com.quangphi.model.StaffsDTO;
 import com.quangphi.service.DepartmentService;
 import com.quangphi.service.StaffsService;
@@ -40,6 +41,13 @@ public class StaffsController {
 			put("urlRecords","/records/");
 		}
 	};
+
+	public Map<String, Object> getAttributeinforStaffPageBasic(StaffsDTO staffsDTO) {
+		Map<String, Object> allAttribute = new HashMap<>();
+		allAttribute.put("staffs", staffsDTO);
+		allAttribute.put("allRecords", staffsDTO.getRecords());
+		return allAttribute;
+	}
 
 	@GetMapping
 	public String home(ModelMap model) {
@@ -162,6 +170,10 @@ public class StaffsController {
 		return "staffs/staffs-management";
 	}
 
-	
+	@GetMapping("/{idStaffs}")
+	public String showInfor(ModelMap model, @PathVariable String idStaffs) {
+		model.addAllAttributes(getAttributeinforStaffPageBasic(staffsService.getByID(idStaffs)));
+		return "staffs/staffs-infor";
+	}
 
 }

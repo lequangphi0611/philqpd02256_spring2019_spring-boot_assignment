@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="common/head :: head"></head>
+
 <body>
 	<th:block th:replace="common/layout :: navbar"></th:block>
 	<div id="wrapper">
@@ -24,7 +26,8 @@
 							<td>:</td>
 							<td class="font-weight-bold" th:text="${department.departmentName}"></td>
 							<td>
-								<button class="btn btn-link" data-toggle="collapse" data-target="#showFormEdit" aria-expanded="false" aria-controls="showFormEdit">
+								<button class="btn btn-link" data-toggle="collapse" data-target="#showFormEdit"
+									aria-expanded="false" aria-controls="showFormEdit">
 									Chỉnh sửa
 								</button>
 							</td>
@@ -35,10 +38,13 @@
 						<tr>
 							<td colspan="4">
 								<div class="collapse" id="showFormEdit">
-									<form th:action="@{/department/edit/{idDepartment}(idDepartment=${department.idDepartment})}" th:object="${department}" class="form-inline" method="post">
+									<form
+										th:action="@{/department/edit/{idDepartment}(idDepartment=${department.idDepartment})}"
+										th:object="${department}" class="form-inline" method="post">
 										<div class="form-group">
 											<label for="departmentName" class="mr-sm-2">Tên phòng ban mới : </label>
-											<input th:field="*{departmentName}" class="form-control mb-2 mr-sm-2" id="departmentName"/>
+											<input th:field="*{departmentName}" class="form-control mb-2 mr-sm-2"
+												id="departmentName" />
 											<small th:if="${#fields.hasErrors('departmentName')}" th:errors="*{departmentName}" class="font-italic text-danger"></small>
 										</div>
 										<button type="submit" class="btn btn-primary mb-2 "><i class="fas fa-save"></i> Lưu</button>
@@ -51,22 +57,27 @@
 				<div class="container col-12">
 					<a class="btn btn-primary" th:href="@{/department}"><i class="fas fa-home"></i>Tất cả phòng ban</a>
 				</div>
-				<hr class="hr col-11">
-				<div class="clear-fix mb-5">
-					<p class="h5 font-weight-bold float-left">Danh sách nhân viên : </p>
-					<div class="float-right">
-						<form th:action="@{/department/find/staffs/{idDepartment}(idDepartment=${department.idDepartment})}" method="get" class="form-inline mb-2">
-							<div class="input-group">
-								<input class="form-control mb-2" name="keyword" placeholder="Tìm kiếm nhân viên..." th:value="${search_key != null ? search_key : ''}"/>
-								<div class="input-group-append">
-									<button type="submit" class="btn btn-primary mb-2"><i class="fas fa-search"></i></button>
+				<div class="card mb-3 mt-4">
+					<div class="card-header">
+							<div class="clearfix ">
+									 <i class="fas fa-table"></i> Danh sách nhân viên : 
+									<div class="float-right">
+										<form th:action="@{/department/find/staffs/{idDepartment}(idDepartment=${department.idDepartment})}" method="get" class="form-inline">
+											<div class="input-group">
+												<input class="form-control" name="keyword" placeholder="Tìm kiếm nhân viên..." th:value="${search_key != null ? search_key : ''}"/>
+												<div class="input-group-append">
+													<button type="submit" class="btn btn-primary "><i class="fas fa-search"></i></button>
+												</div>
+											</div>
+										</form>
+									</div>
+									<a th:href="@{/department/{idDepartment}/staffs/add(idDepartment=${department.idDepartment})}" class="btn btn-primary mr-lg-3 float-right"> Thêm nhân viên </a>
 								</div>
-							</div>
-						</form>
 					</div>
-					<a th:href="@{/department/{idDepartment}/staffs/add(idDepartment=${department.idDepartment})}" class="btn btn-primary mr-lg-3 mb-2 float-right"> Thêm nhân viên </a>
+					<div class="card-body">
+						<section th:replace="staffs/staffs-show-data :: staffs-data"></section>
+					</div>
 				</div>
-				<section th:replace="staffs/staffs-show-data :: staffs-data"></section>
 			</section>
 		</div>
 		<footer th:replace="common/layout :: footer"> </footer>

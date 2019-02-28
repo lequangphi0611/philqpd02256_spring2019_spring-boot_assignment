@@ -10,14 +10,20 @@
         <div class="d-flex-custom col-12">
             <div class="col-3 box-form-login">
                 <form th:action="@{/authenticate/login}" th:object="${account}" method="POST">
+                    <input type="hidden" th:field="*{fullname}"/>
                     <div class="form-group">
                         <label for="">Tên đăng nhập :</label>
-                        <input type="text" th:field="*{username}" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                        <input type="text" th:field="*{username}" name="" id="" class="form-control" placeholder=""
+                            aria-describedby="helpId">
+                        <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"	class="font-italic text-danger">Errors</small>
+                        <small th:if="${username_error}" th:text="${username_error}"	class="font-italic text-danger">Errors</small>
                     </div>
                     <div class="form-group">
                         <label for="">Mật khẩu :</label>
                         <input type="password" th:field="*{password}" name="" id="" class="form-control" placeholder=""
                             aria-describedby="helpId">
+                            <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}"	class="font-italic text-danger">Errors</small>
+                            <small th:if="${pass_error}" th:text="${pass_error}"	class="font-italic text-danger">Errors</small>
                     </div>
                     <input type="submit" class="btn btn-danger col-12" value="Đăng nhập">
                 </form>

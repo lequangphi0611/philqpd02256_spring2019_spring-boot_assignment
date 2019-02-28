@@ -20,5 +20,7 @@ public interface StaffsService {
 	Iterable<StaffsDTO> findStaffsByKeyword(String keyword);
 	
 	long countStaffBy(DepartmentDTO department);
+
+	long count();
 	
 }

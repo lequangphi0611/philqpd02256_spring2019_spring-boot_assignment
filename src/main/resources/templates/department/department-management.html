@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="common/head :: head"></head>
+
 <body>
 	<th:block th:replace="common/layout :: navbar"></th:block>
 	<div id="wrapper">
@@ -8,12 +10,13 @@
 		<div id="content-wrapper">
 			<section class="col-12 container mt-5">
 				<div class="h1 text-center text-primary">Quản Lý Phòng Ban</div>
-				<hr class="col-11"/>
+				<hr class="col-11" />
 				<div class="container mt-5">
 					<form th:action="@{/department/add}" class="form-inline" th:object="${department}" method="post">
 						<div class="form-group mr-sm-2">
 							<label for="idDeparment" class="mr-sm-2">Mã phòng ban : </label>
-							<input th:field="*{idDepartment}" id="idDepartment" class="form-control mb-2 mr-sm-2" aria-describedby="idDepartments"/>
+							<input th:field="*{idDepartment}" id="idDepartment" class="form-control mb-2 mr-sm-2"
+								aria-describedby="idDepartments" />
 							<small th:if="${#fields.hasErrors('idDepartment')}" th:errors="*{idDepartment}"	class="font-italic text-danger">Errors</small>
 							<small th:if="${idExists != null}" id="idDepartments" class="font-italic text-danger" th:text="${idExists}"></small>
 						</div>
@@ -26,41 +29,43 @@
 						<button type="submit" class="btn btn-primary mb-2"><i class="fas fa-save"></i> Lưu</button>
 					</form>
 				</div>
-				<hr class="col-11"/>
-				<p class="h4 clearfix mt-4">Danh sách phòng ban : </p>
-				<div class="mt-4">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>No.</th>
-								<th>Mã Phòng Ban</th>
-								<th>Tên Phòng Ban</th>
-								<th>Số Lượng Nhân Viên</th>
-								<th></th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="department,i : ${allDepartments}">
-								<td th:text="${i.index + 1}" scope="row"></td>
-								<td>
-									<a th:text="${department.idDepartment}" th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark"></a>
-								</td>
-								<td >
-									<a th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark" th:text="${department.departmentName}"></a>
-								</td>
-								<td >
-									<a th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark" th:text="${department.countStaffs}"></a>
-								</td>
-								<td class="text-center">
-									<a th:href="@{/department/{idDepartment}/staffs/add(idDepartment=${department.idDepartment})}" class="btn btn-primary"> <i class="fas fa-plus-square"></i> Thêm nhân viên</a>
-								</td>
-								<td class="text-center">
-									<a th:href="@{/department/delete/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-danger"> <i class="fas fa-times-circle"></i> Xóa</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="card mb-3">
+					<div class="card-header">
+						<i class="fas fa-table"></i> Danh sách phòng ban :
+					</div>
+					<div class="card-body">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>No.</th>
+											<th>Mã Phòng Ban</th>
+											<th>Tên Phòng Ban</th>
+											<th>Số Lượng Nhân Viên</th>
+											<th></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="department,i : ${allDepartments}">
+											<td th:text="${i.index + 1}" scope="row"></td>
+											<td>
+												<a th:text="${department.idDepartment}" th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark"></a>
+											</td>
+											<td >
+												<a th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark" th:text="${department.departmentName}"></a>
+											</td>
+											<td >
+												<a th:href="@{/department/infor/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-link text-dark" th:text="${department.countStaffs}"></a>
+											</td>
+											<td class="text-center">
+												<a th:href="@{/department/{idDepartment}/staffs/add(idDepartment=${department.idDepartment})}" class="btn btn-primary"> <i class="fas fa-plus-square"></i> Thêm nhân viên</a>
+											</td>
+											<td class="text-center">
+												<a th:href="@{/department/delete/{idDepartment}(idDepartment=${department.idDepartment})}" class="btn btn-danger"> <i class="fas fa-times-circle"></i> Xóa</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
 				</div>
 			</section>
 		</div>

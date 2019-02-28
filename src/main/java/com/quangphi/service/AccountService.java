@@ -19,5 +19,7 @@ public interface AccountService {
     AccountDTO get(String username);
 
     boolean existsByIDAccount(String username);
+
+    long count();
     
 }

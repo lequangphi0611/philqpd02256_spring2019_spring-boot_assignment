@@ -95,4 +95,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 				(department) -> DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(department));
 	}
 
+	@Override
+	public long count() {
+		return departmentRepository.count();
+	}
+
 }

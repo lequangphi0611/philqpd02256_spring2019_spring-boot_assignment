@@ -2,6 +2,7 @@ package com.quangphi.model;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +30,7 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 
 	private DepartmentDTO department;
 
-	private List<RecordsDTO> records = new ArrayList<>();
+	private List<RecordsDTO> records;
 
 	public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
 		StaffsDTO staffsDTO = new StaffsDTO();
@@ -47,6 +48,7 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 		staffsEntity.getRecords().forEach((recordsEntity) -> {
 			records.add(RecordsDTO.parseRecordsDTO(recordsEntity));
 		});
+		Collections.sort(records);
 		staffsDTO.setRecords(records);
 		return staffsDTO;
 	}
@@ -184,45 +186,64 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 	}
 
 	public int getLevel() {
-		int level = StaffsDTO.LEVEL_MIN;
+		int achievement = 0;
+		int discipline = 0;
 		for (RecordsDTO items : this.records) {
-			if (items.getType() && level < StaffsDTO.LEVEL_MAX) {
-				level++;
-			} else if (level > StaffsDTO.LEVEL_MIN) {
-				level--;
+			if (items.getType()) {
+				achievement++;
+				continue;
 			}
+			discipline++;
+		}
+		int level = achievement - discipline;
+		if (level == StaffsDTO.LEVEL_MIN) {
+			level++;
+		} else if (level < StaffsDTO.LEVEL_MIN) {
+			level = StaffsDTO.LEVEL_MIN;
+		} else if (level > StaffsDTO.LEVEL_MAX) {
+			level = StaffsDTO.LEVEL_MAX;
 		}
 		return level;
 	}
 
-	public int getAchievement() {
+	public int getType(boolean condition) {
 		int result = 0;
-		for(RecordsDTO recordsDTO : this.records) {
-			if(recordsDTO.getType()) {
+		for (RecordsDTO recordsDTO : this.records) {
+			if (recordsDTO.getType() == condition) {
 				result++;
 			}
 		}
 		return result;
 	}
 
+	public int getAchievement() {
+		return getType(true);
+	}
+
 	public int getDiscipline() {
-		int result = 0;
-		for(RecordsDTO recordsDTO : this.records) {
-			if(!recordsDTO.getType()) {
-				result--;
-			}
-		}
-		return result;
+		return getType(false);
 	}
 
 	@Override
 	public int compareTo(StaffsDTO o) {
-		int level_this = this.getLevel();
-		int level_o = o.getLevel();
+		int achievement_this = getAchievement();
+		int discipline_this = getDiscipline();
+		int achievement_o = o.getAchievement();
+		int discipline_o = o.getDiscipline();
+		int level_this = achievement_this - discipline_this;
+		int level_o = achievement_o - discipline_o;
 		if (level_this > level_o) {
 			return -1;
 		} else if (level_this < level_o) {
 			return 1;
+		}else if(achievement_this > achievement_o) {
+			return -1;
+		} else if (achievement_this < achievement_o) {
+			return 1;
+		} else if (discipline_this > discipline_o) {
+			return 1;
+		} else if(discipline_this < discipline_o) {
+			return -1;
 		}
 		return 0;
 	}

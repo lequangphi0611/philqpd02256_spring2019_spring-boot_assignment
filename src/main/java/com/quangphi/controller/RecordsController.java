@@ -87,11 +87,33 @@ public class RecordsController {
     @PostMapping(value = "/{idDepartment}/{idStaffs}")
     public String feedbackDepartmentRequest(@ModelAttribute RecordsDTO recordsDTO, @RequestParam int type_records,
             @PathVariable String idDepartment, @PathVariable String idStaffs) {
-                StaffsDTO staffs = staffsService.getByID(idStaffs);
+        StaffsDTO staffs = staffsService.getByID(idStaffs);
         recordsDTO.setType(type_records == 1);
         recordsDTO.setStaffsDTO(staffs);
         recordsService.addRecords(recordsDTO);
         return "redirect:/department/infor/" + idDepartment;
+    }
+
+    @GetMapping("/infor/{idStaffs}")
+    public String feedbackToStaffsInfo(ModelMap model, @PathVariable String idStaffs) {
+        model.addAllAttributes(new HashMap<String, Object>() {
+            {
+                put(RecordsController.ACTION_KEY, "/records/infor/" + idStaffs);
+                put(RecordsController.URL_KEY, "/staffs/" + idStaffs);
+            }
+        });
+        init(model, idStaffs);
+        return "records/records-form";
+    }
+
+    @PostMapping("/infor/{idStaffs}")
+    public String feedbackToStaffsInfo(ModelMap model, @ModelAttribute RecordsDTO records,
+            @RequestParam int type_records, @PathVariable String idStaffs) {
+        StaffsDTO staffs = staffsService.getByID(idStaffs);
+        records.setType(type_records == 1);
+        records.setStaffsDTO(staffs);
+        recordsService.addRecords(records);
+        return "redirect:/staffs/" + idStaffs;
     }
 
 }

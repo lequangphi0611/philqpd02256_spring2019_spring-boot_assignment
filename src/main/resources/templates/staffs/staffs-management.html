@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="common/head :: head"></head>
+
 <body>
 	<th:block th:replace="common/layout :: navbar"></th:block>
 	<div id="wrapper">
@@ -8,26 +10,33 @@
 		<div id="content-wrapper">
 			<section class="container col-12">
 				<div class="h1 text-center text-primary">Nhân Viên</div>
-				<hr class="col-6 mt-sm-4 mb-sm-4" >
+				<hr class="col-6 mt-sm-4 mb-sm-4">
 				<div class="col-12 container">
-					<a th:href="@{/staffs/add}" class="btn btn-primary"><i class="fas fa-plus-square"></i> Thêm nhân viên</a>
-					<div class="clearfix">
-						<hr class="float-left col-5 mb-sm-4">
-					</div>
-					<div class="container col-12 clearfix">
-						<p class="h5 float-left mt-2">Danh sách nhân viên : </p>
-						<div class="float-right">
-							<form th:action="@{/staffs/search}" method="get" class="form-inline">
-								<div class="input-group">
-									<input class="form-control" name="keyword" placeholder="Tìm kiếm nhân viên..." th:value="${search_key != null ? search_key : ''}"/>
-									<div class="input-group-append">
-										<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-									</div>
+					<a th:href="@{/staffs/add}" class="btn btn-primary"><i class="fas fa-plus-square"></i> Thêm nhân
+						viên</a>
+					<div class="card mb-3 mt-sm-4">
+						<div class="card-header">
+							<div class="clearfix">
+								<i class="fas fa-table"></i> Danh sách nhân viên : 
+								<div class="float-right">
+									<form th:action="@{/staffs/search}" method="get" class="form-inline">
+										<div class="input-group">
+											<input class="form-control" name="keyword"
+												placeholder="Tìm kiếm nhân viên..."
+												th:value="${search_key != null ? search_key : ''}" />
+											<div class="input-group-append">
+												<button type="submit" class="btn btn-primary"><i
+														class="fas fa-search"></i></button>
+											</div>
+										</div>
+									</form>
 								</div>
-							</form>
+							</div>
+						</div>
+						<div class="card-body">
+							<section th:replace="staffs/staffs-show-data :: staffs-data"></section>
 						</div>
 					</div>
-					<section th:replace="staffs/staffs-show-data :: staffs-data"></section>
 				</div>
 			</section>
 		</div>
@@ -35,4 +44,5 @@
 	</div>
 	<th:block th:replace="common/scriptsource :: script"></th:block>
 </body>
+
 </html>
