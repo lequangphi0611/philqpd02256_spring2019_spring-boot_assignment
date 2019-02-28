@@ -7,19 +7,23 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.quangphi.model.RecordsDTO;
 import com.quangphi.model.StaffsDTO;
 import com.quangphi.repository.StaffsRepository;
 import com.quangphi.service.DepartmentService;
+import com.quangphi.service.RecordsService;
 import com.quangphi.service.StaffsService;
 
 //@RestController
@@ -34,19 +38,16 @@ public class TestController {
 	
 	@Autowired
 	private StaffsRepository staffsRepository;
+
+	@Autowired
+	private RecordsService recordsService;
 	
-	@GetMapping("/upload")
-	public String upload() {
-		return "staffs/testUpload";
-	}
-	
-	@GetMapping("/ttt")
-	@ResponseBody
-	public List<StaffsDTO> test() {
-		staffsService.getALLStaffs().forEach(
-			items -> System.out.println(items.getStaffsName() +"  -- "+items.getLevel())
-		);
-		return (List<StaffsDTO>) staffsService.getALLStaffs();
+	@GetMapping("/test")
+	public String tesst(ModelMap model) {
+		List<RecordsDTO> allRecords = (List<RecordsDTO>)recordsService.getAll();
+		Collections.sort(allRecords);
+		model.addAttribute("allRecords", allRecords);
+		return "staffs/staff-infor";
 	}
 
 }

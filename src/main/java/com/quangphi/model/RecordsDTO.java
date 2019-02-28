@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.quangphi.entity.Records;
 
-public class RecordsDTO {
+public class RecordsDTO implements Comparable<RecordsDTO> {
 
     private boolean type;
     private String reason;
@@ -20,7 +20,8 @@ public class RecordsDTO {
         return new RecordsDTO(recordsEntity.isType(), recordsEntity.getReason(), recordsEntity.getDate());
     }
 
-    public RecordsDTO() {}
+    public RecordsDTO() {
+    }
 
     public RecordsDTO(boolean type, String reason, Date date) {
         this.type = type;
@@ -62,7 +63,7 @@ public class RecordsDTO {
     public void setDate(Date date) {
         this.date = date;
     }
-    
+
     public StaffsDTO getStaffsDTO() {
         return staffsDTO;
     }
@@ -74,5 +75,17 @@ public class RecordsDTO {
     public Records toRecords() {
         return new Records(type, reason, date, staffsDTO.toStaffsEntity());
     }
-    
+
+    @Override
+    public int compareTo(RecordsDTO o) {
+        long time_this = this.date.getTime();
+        long time_o = o.date.getTime();
+        if (time_this > time_o) {
+            return -1;
+        } else if (time_this < time_o) {
+            return 1;
+        }
+        return 0;
+    }
+
 }

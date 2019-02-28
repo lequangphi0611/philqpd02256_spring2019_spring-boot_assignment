@@ -31,10 +31,6 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 
 	private List<RecordsDTO> records = new ArrayList<>();
 
-	enum AssessValue {
-		GOOD, ORDINARY, BAD;
-	}
-
 	public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
 		StaffsDTO staffsDTO = new StaffsDTO();
 		staffsDTO.setIdStaffs(staffsEntity.getIdStaffs());
@@ -199,14 +195,24 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 		return level;
 	}
 
-	public AssessValue getAssessValue() {
-		int level = getLevel();
-		if (level < 5) {
-			return AssessValue.BAD;
-		} else if (level < 8) {
-			return AssessValue.ORDINARY;
+	public int getAchievement() {
+		int result = 0;
+		for(RecordsDTO recordsDTO : this.records) {
+			if(recordsDTO.getType()) {
+				result++;
+			}
 		}
-		return AssessValue.GOOD;
+		return result;
+	}
+
+	public int getDiscipline() {
+		int result = 0;
+		for(RecordsDTO recordsDTO : this.records) {
+			if(!recordsDTO.getType()) {
+				result--;
+			}
+		}
+		return result;
 	}
 
 	@Override

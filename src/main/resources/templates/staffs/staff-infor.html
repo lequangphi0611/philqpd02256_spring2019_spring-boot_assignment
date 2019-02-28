@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/head :: head"></head>
+
+<body>
+    <th:block th:replace="common/layout :: navbar"></th:block>
+    <div id="wrapper">
+        <th:block th:replace="common/layout :: sidebar"></th:block>
+        <div id="content-wrapper">
+            <p class="text-center text-info h1 mt-sm-3">Thông Tin Nhân Viên</p>
+            <section class="container col-12 mt-sm-5">
+                <div class="col-8 ml-lg-5">
+                    <div class="clearfix">
+                        <div class="mr-5 float-left">
+                            <img src="/img/jisoo.jpg" alt="" class="img-thumbnail img-fluid"
+                                style="height:200px;width:auto;" />
+                        </div>
+                        <div class="font-weight-normal h6 float-left">
+                            <table class="spacing-table">
+                                <tr>
+                                    <td>Tên nhân viên </td>
+                                    <td> : </td>
+                                    <td th:text="${staffs.staffsName}" class="font-weight-bold"></td>
+                                </tr>
+                                <tr>
+                                    <td>Cấp độ </td>
+                                    <td> : </td>
+                                    <td th:text="${staffs.getLevel()}" class="font-weight-bold">10</td>
+                                </tr>
+                                <tr>
+                                    <td>Đánh giá </td>
+                                    <td> : </td>
+                                    <td class="font-weight-bold">
+                                        <b th:text="${staffs.getAchievement()}" class="font-weight-normal"></b> thành tích <b th:text="${staffs.getDiscipline()}" class="font-weight-normal"></b> kỷ luật
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <hr class="col-10 mt-sm-4 mb-sm-2">
+                <div class="text-info h4 ml-sm-2 mt-lg-4">Danh sách đánh giá : </div>
+                <section th:replace="records/records-data :: records-data"></section>
+            </section>
+        </div>
+        <footer th:replace="common/layout :: footer"> </footer>
+    </div>
+    <th:block th:replace="common/scriptsource :: script"></th:block>
+</body>
+
+</html>
