@@ -8,13 +8,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.quangphi.model.AccountDTO;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.quangphi.model.AccountDTO;
 
 @Component
 @Order(1)

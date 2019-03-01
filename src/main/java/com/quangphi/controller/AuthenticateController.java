@@ -1,11 +1,7 @@
 package com.quangphi.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
-import com.quangphi.model.AccountDTO;
-import com.quangphi.service.AccountService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.quangphi.model.AccountDTO;
+import com.quangphi.service.AccountService;
 
 @Controller
 @RequestMapping("/authenticate")
