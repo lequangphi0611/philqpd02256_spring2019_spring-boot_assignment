@@ -9,16 +9,17 @@
 					<tr>
 						<th>No.</th>
 						<th>Ảnh</th>
-						<th>Mã nhân viên</th>
-						<th>Tên nhân viên</th>
-						<th>Ngày sinh</th>
-						<th>Giới tính</th>
+						<th>Mã Nhân Viên</th>
+						<th>Tên Nhân Viên</th>
+						<th>Ngày Sinh</th>
+						<th>Giới Tính</th>
 						<th>Email</th>
 						<th>Số điện thoại</th>
 						<th>Lương</th>
-						<th>Cấp độ</th>
-						<th>Chú thích</th>
-						<th>Phòng ban</th>
+						<th>Cấp Độ</th>
+						<th>Điểm Thưởng</th>
+						<th>Chú Thích</th>
+						<th>Phòng Ban</th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -40,7 +41,7 @@
 						<td class="align-middle" scope="row" th:text="${i.index + 1}"></td>
 						<td class="align-middle">
 							<a th:href="@{/staffs/} + ${staffs.idStaffs}" th:class="text-dark">
-								<img class="rounded" style="width:80px;height:auto;"
+								<img class="rounded" style="width:60px;height:auto;"
 									th:src="${'/img/'} + ${staffs.photo.getOriginalFilename()}"
 									th:alt="${'/img/'} + ${staffs.photo.getOriginalFilename()}" />
 							</a>
@@ -63,8 +64,13 @@
 						<td class="align-middle" th:text="${staffs.phone}"></td>
 						<td class="align-middle" th:text="${staffs.getSalaryCurrency()}"></td>
 						<td class="align-middle text-center font-weight-bold" th:text="${staffs.getLevel()}"></td>
+						<td class="align-middle text-center font-weight-bold" th:text="${staffs.getAchievement() - staffs.getDiscipline()}"></td>
 						<td class="align-middle" th:text="${staffs.notes}"></td>
-						<td class="align-middle" th:text="${staffs.department}"></td>
+						<td class="align-middle" >
+							<a th:text="${staffs.department}"
+                                th:href="@{/department/infor/} + ${staffs.department.idDepartment}"
+                                class="text-dark"></a>
+						</td>
 						<td class="align-middle">
 							<a class="btn btn-primary" th:href="${urlRecords} + ${staffs.idStaffs}" role="button"><i class="fas fa-comment-alt"></i></a>
 						</td>

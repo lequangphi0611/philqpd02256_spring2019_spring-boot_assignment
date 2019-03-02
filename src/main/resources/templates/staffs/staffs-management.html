@@ -17,7 +17,7 @@
 					<div class="card mb-3 mt-sm-4">
 						<div class="card-header">
 							<div class="clearfix">
-								<i class="fas fa-table"></i> Danh sách nhân viên : 
+								<i class="fas fa-table"></i> Danh sách nhân viên :
 								<div class="float-right">
 									<form th:action="@{/staffs/search}" method="get" class="form-inline">
 										<div class="input-group">
@@ -29,6 +29,20 @@
 														class="fas fa-search"></i></button>
 											</div>
 										</div>
+									</form>
+								</div>
+								<div class="float-right mr-lg-5">
+									<form th:action="@{/staffs}" class="form-inline">
+										<div class="form-group">
+											<label for="select">Hiển thị : </label>
+											<select name="filter_key"
+												class="custom-select mb-2 mr-sm-4 mb-sm-0 ml-sm-3" id="select">
+												<option value="all" th:selected="${filter_type eq 'all'}"> Tất cả </option>
+												<option value="achievement" th:selected="${filter_type eq 'achievement'}">Nhân viên được khen thưởng</option>
+												<option value="discipline" th:selected="${filter_type eq 'discipline'}">Nhân viên bị kỷ luật</option>
+											</select>
+										</div>
+										<button class="btn btn-danger" type="submit"><i class="fas fa-redo-alt"></i></button>
 									</form>
 								</div>
 							</div>

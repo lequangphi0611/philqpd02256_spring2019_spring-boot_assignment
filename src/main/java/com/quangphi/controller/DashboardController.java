@@ -18,30 +18,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashboardController {
 
-	@Autowired DepartmentService departmentService;
+	@Autowired
+	DepartmentService departmentService;
 
-	@Autowired StaffsService staffsService;
+	@Autowired
+	StaffsService staffsService;
 
-	@Autowired AccountService accountService;
+	@Autowired
+	AccountService accountService;
 
-	final Map<String,Object> allAttributeCount() {
+	final Map<String, Object> allAttributeCount() {
 		Map<String, Object> allAttribute = new HashMap<>();
-		allAttribute.put("count_department",departmentService.count());
+		allAttribute.put("count_department", departmentService.count());
 		allAttribute.put("count_staffs", staffsService.count());
 		allAttribute.put("count_account", accountService.count());
 		return allAttribute;
 	}
-	
+
 	@GetMapping("/index.html")
 	public String home(ModelMap model) {
 		model.addAllAttributes(allAttributeCount());
 		List<StaffsDTO> allStaffs = new ArrayList<>();
-		for(StaffsDTO staffs : staffsService.getALLStaffs()) {
-			if(allStaffs.size() < 10) {
-				allStaffs.add(staffs);
-				continue;
-			}
-			break;
+		for (StaffsDTO staffs : staffsService.getALLStaffs()) {
+			if (allStaffs.size() == 10) break;
+			allStaffs.add(staffs);
 		}
 		model.addAttribute("allStaffs", allStaffs);
 		return "index";

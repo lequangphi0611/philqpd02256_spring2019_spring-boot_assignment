@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import com.quangphi.exception.ExistsException;
 import com.quangphi.model.DepartmentDTO;
 import com.quangphi.model.Gender;
-import com.quangphi.model.RecordsDTO;
 import com.quangphi.model.StaffsDTO;
 import com.quangphi.service.DepartmentService;
 import com.quangphi.service.StaffsService;
@@ -54,8 +53,23 @@ public class StaffsController {
 	}
 
 	@GetMapping
-	public String home(ModelMap model) {
-		model.addAttribute("allStaffs", staffsService.getALLStaffs());
+	public String home(ModelMap model, @RequestParam(required = false) String filter_key) {
+		Iterable<StaffsDTO> allStaffs = null;
+		if (filter_key == null || filter_key.equalsIgnoreCase("all")) {
+			allStaffs = staffsService.getALLStaffs();
+		} else {
+			switch (filter_key) {
+			case "achievement":
+				allStaffs = staffsService
+						.findAllStaffsBy(staffs -> (staffs.getAchievement() - staffs.getDiscipline()) > 0);
+				break;
+			case "discipline":
+				allStaffs = staffsService
+						.findAllStaffsBy(staffs -> (staffs.getAchievement() - staffs.getDiscipline()) < 0);
+			}
+		}
+		model.addAttribute("filter_type", filter_key == null ? "all" : filter_key);
+		model.addAttribute("allStaffs", allStaffs);
 		model.addAllAttributes(attributeURLEditAndDel);
 		return "staffs/staffs-management";
 	}
@@ -85,9 +99,9 @@ public class StaffsController {
 			String action) {
 		storageService.writeFile(staffsDTO.getPhoto());
 		StaffsDTO staffsAttribute = new StaffsDTO();
-		try{
+		try {
 			staffsService.addStaffs(getStaffTo(staffsDTO, gender, idDepartment));
-		}catch (ExistsException ex) {
+		} catch (ExistsException ex) {
 			model.addAttribute("id_error", "Mã nhân viên đã tồn tại");
 			staffsAttribute = staffsDTO;
 		}
@@ -105,8 +119,8 @@ public class StaffsController {
 	}
 
 	@PostMapping("/add/department")
-	public String addOfDepartment(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult, ModelMap model,
-			@RequestParam String gender, @RequestParam String idDepartment) {
+	public String addOfDepartment(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult,
+			ModelMap model, @RequestParam String gender, @RequestParam String idDepartment) {
 		String requestURL = "/department/infor/" + idDepartment;
 		String action = "/staffs/add/department";
 		if (bindingResult.hasErrors()) {
@@ -159,8 +173,8 @@ public class StaffsController {
 	}
 
 	@PostMapping("/edit/department")
-	public String editOfDepartment(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult, ModelMap model,
-			@RequestParam String gender, @RequestParam String idDepartment) {
+	public String editOfDepartment(@ModelAttribute("staffs") @Valid StaffsDTO staffs, BindingResult bindingResult,
+			ModelMap model, @RequestParam String gender, @RequestParam String idDepartment) {
 		if (bindingResult.hasErrors()) {
 			initForm(model, staffs, "/department/infor/" + idDepartment, "/staffs/edit/department");
 			return "staffs/add-or-update-staffs";

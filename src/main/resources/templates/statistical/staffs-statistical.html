@@ -33,8 +33,10 @@
                             <a th:text="${staffs.staffsName}" th:href="@{/staffs/} + ${staffs.idStaffs}"
                                 class="text-dark"></a>
                         </td>
-                        <td class="align-middle" th:text="${staffs.department.departmentName}">
-
+                        <td class="align-middle">
+                            <a th:text="${staffs.department.departmentName}"
+                                th:href="@{/department/infor/} + ${staffs.department.idDepartment}"
+                                class="text-dark"></a>
                         </td>
                         <td th:text="${staffs.getAchievement()}" class="align-middle">
                         </td>

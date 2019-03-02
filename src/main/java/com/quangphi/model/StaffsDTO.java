@@ -39,15 +39,14 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 	private MultipartFile photo;
 
 	@NotEmpty(message = "Không để trống email")
-	@Pattern(regexp="\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b", 
-		message = "Email sai định dạng (vd : example@gmail.com)")
+	@Pattern(regexp = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b", message = "Email sai định dạng (vd : example@gmail.com)")
 	private String email;
 
 	@NotEmpty(message = "Không được để trống số điện thoại")
 	@Length(max = 10, min = 10, message = "Số điện thoại phải là 10 ký tự")
-	@Pattern(regexp = "\\d+", message="Số điện thoại phải là số")
+	@Pattern(regexp = "\\d+", message = "Số điện thoại phải là số")
 	private String phone;
-	
+
 	private Long salary = 0L;
 	private String notes;
 
@@ -209,12 +208,10 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 
 	public int getLevel() {
 		int level = getAchievement() - getDiscipline();
-		if (level == StaffsDTO.LEVEL_MIN) {
-			level++;
-		} else if (level < StaffsDTO.LEVEL_MIN) {
-			level = StaffsDTO.LEVEL_MIN;
+		if (level < StaffsDTO.LEVEL_MIN) {
+			return StaffsDTO.LEVEL_MIN;
 		} else if (level > StaffsDTO.LEVEL_MAX) {
-			level = StaffsDTO.LEVEL_MAX;
+			return StaffsDTO.LEVEL_MAX;
 		}
 		return level;
 	}
@@ -249,13 +246,13 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 			return -1;
 		} else if (level_this < level_o) {
 			return 1;
-		}else if(achievement_this > achievement_o) {
+		} else if (achievement_this > achievement_o) {
 			return -1;
 		} else if (achievement_this < achievement_o) {
 			return 1;
 		} else if (discipline_this > discipline_o) {
 			return 1;
-		} else if(discipline_this < discipline_o) {
+		} else if (discipline_this < discipline_o) {
 			return -1;
 		}
 		return 0;
