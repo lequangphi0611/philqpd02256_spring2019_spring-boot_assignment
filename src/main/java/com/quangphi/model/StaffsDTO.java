@@ -261,22 +261,4 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 		return 0;
 	}
 
-
-	@Override
-	public String toString() {
-		return "{" +
-			" idStaffs='" + getIdStaffs() + "'" +
-			", staffsName='" + getStaffsName() + "'" +
-			", birthday='" + getBirthday() + "'" +
-			", gender='" + getGender() + "'" +
-			", photo='" + getPhoto() + "'" +
-			", email='" + getEmail() + "'" +
-			", phone='" + getPhone() + "'" +
-			", salary='" + getSalary() + "'" +
-			", notes='" + getNotes() + "'" +
-			", department='" + getDepartment() + "'" +
-			", records='" + getRecords() + "'" +
-			"}";
-	}
-
 }

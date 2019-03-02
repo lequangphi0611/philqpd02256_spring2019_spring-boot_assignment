@@ -34,7 +34,6 @@ public class StatisticalController {
         }
         model.addAttribute("status", true);
         model.addAttribute("allStaffs", staffsService.getALLStaffs());
-        model.addAttribute("data_fragment", "statistical/staffs-statistical :: table-data");
         return "statistical/statistical-index";
     }
 
@@ -55,10 +54,6 @@ public class StatisticalController {
             this.department = department;
         }
 
-        public boolean isAlreadyStaffs() {
-            return department.getAllStaffs().size() > 0;
-        }
-
         public DepartmentDTO getDepartment() {
             return department;
         }
@@ -68,7 +63,7 @@ public class StatisticalController {
         }
 
         public StaffsDTO getTopStaffs() {
-            return isAlreadyStaffs() ? department.getAllStaffs().get(0) : new StaffsDTO();
+            return !department.getAllStaffs().isEmpty() ? department.getAllStaffs().get(0) : new StaffsDTO();
         }
 
         public int getTotalAchievement() {
