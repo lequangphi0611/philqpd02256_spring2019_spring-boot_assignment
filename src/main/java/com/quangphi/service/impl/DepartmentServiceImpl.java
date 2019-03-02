@@ -59,7 +59,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public List<DepartmentDTO> getAllDepartments() {
 		return (List<DepartmentDTO>) convertListSupport.converting(departmentRepository.findAll(),
-				(department) -> DepartmentDTO.parseDepartmentDTO(department));
+				DepartmentDTO::parseDepartmentDTO);
 	}
 
 	@Override
@@ -81,18 +81,18 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public DepartmentDTO getByIdWithOutFetchStaffs(String idDepartment) {
-		return getByID(idDepartment, (department) -> DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(department));
+		return getByID(idDepartment, DepartmentDTO::parseDepartmentDTOWidthOutFetchStaffs);
 	}
 
 	@Override
 	public DepartmentDTO getByIdFetchStaffs(String idDepartment) {
-		return getByID(idDepartment, (department) -> DepartmentDTO.parseDepartmentDTO(department));
+		return getByID(idDepartment, DepartmentDTO::parseDepartmentDTO);
 	}
 
 	@Override
 	public Iterable<DepartmentDTO> getAllDepartmentWithOutFetchStaffs() {
 		return convertListSupport.converting(departmentRepository.findAll(),
-				(department) -> DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(department));
+				DepartmentDTO::parseDepartmentDTOWidthOutFetchStaffs);
 	}
 
 	@Override

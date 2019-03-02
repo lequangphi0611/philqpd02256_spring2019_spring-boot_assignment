@@ -23,7 +23,7 @@ public class AccountServiceImpl implements AccountService {
 
     private List<AccountDTO> parseAccountDTOs(Iterable<Account> accounts) {
         return (List<AccountDTO>) convertListSupport
-        		.converting(accounts, accountEntity -> AccountDTO.parseAccountDTO(accountEntity));
+        		.converting(accounts, AccountDTO::parseAccountDTO);
     }
 
     @Override

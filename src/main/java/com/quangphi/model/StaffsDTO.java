@@ -208,16 +208,7 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 	}
 
 	public int getLevel() {
-		int achievement = 0;
-		int discipline = 0;
-		for (RecordsDTO items : this.records) {
-			if (items.getType()) {
-				achievement++;
-				continue;
-			}
-			discipline++;
-		}
-		int level = achievement - discipline;
+		int level = getAchievement() - getDiscipline();
 		if (level == StaffsDTO.LEVEL_MIN) {
 			level++;
 		} else if (level < StaffsDTO.LEVEL_MIN) {
@@ -269,4 +260,23 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 		}
 		return 0;
 	}
+
+
+	@Override
+	public String toString() {
+		return "{" +
+			" idStaffs='" + getIdStaffs() + "'" +
+			", staffsName='" + getStaffsName() + "'" +
+			", birthday='" + getBirthday() + "'" +
+			", gender='" + getGender() + "'" +
+			", photo='" + getPhoto() + "'" +
+			", email='" + getEmail() + "'" +
+			", phone='" + getPhone() + "'" +
+			", salary='" + getSalary() + "'" +
+			", notes='" + getNotes() + "'" +
+			", department='" + getDepartment() + "'" +
+			", records='" + getRecords() + "'" +
+			"}";
+	}
+
 }

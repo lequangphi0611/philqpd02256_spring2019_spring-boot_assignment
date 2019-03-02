@@ -1,5 +1,6 @@
 package com.quangphi.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class StaffsServiceImpl implements StaffsService {
 	private ConvertListSupport<StaffsDTO, Staffs> convertListSupport;
 
 	public Parsers<StaffsDTO, Staffs> getPasersStaffs() {
-		return (staffs) -> StaffsDTO.parseStaffsDTO(staffs);
+		return StaffsDTO::parseStaffsDTO;
 	}
 
 	@Override
@@ -129,6 +130,19 @@ public class StaffsServiceImpl implements StaffsService {
 	@Override
 	public long count() {
 		return staffsRepository.count();
+	}
+
+	@Override
+	public Iterable<StaffsDTO> findAllStaffsBy(Condition condition) {
+		List<StaffsDTO> allStaffsDTO = new ArrayList<>();
+		getALLStaffs().forEach(
+			(staffs) -> {
+				if(condition.check(staffs)) {
+					allStaffsDTO.add(staffs);
+				}
+			}
+		);
+		return allStaffsDTO;
 	}
 
 }

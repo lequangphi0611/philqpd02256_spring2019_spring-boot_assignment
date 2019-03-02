@@ -4,6 +4,10 @@ import com.quangphi.model.DepartmentDTO;
 import com.quangphi.model.StaffsDTO;
 
 public interface StaffsService {
+
+	interface Condition {
+		boolean check(StaffsDTO staffsDTO);
+	}
 	
 	StaffsDTO addStaffs(StaffsDTO staffsDTO);
 	
@@ -22,5 +26,7 @@ public interface StaffsService {
 	long countStaffBy(DepartmentDTO department);
 
 	long count();
+
+	Iterable<StaffsDTO> findAllStaffsBy(Condition condition);
 	
 }

@@ -23,6 +23,7 @@ public class Application {
 		registrationBean.addUrlPatterns("/staffs/*");
 		registrationBean.addUrlPatterns("/account/*");
 		registrationBean.addUrlPatterns("/records/*");
+		registrationBean.addUrlPatterns("/statistical/*");
 		return registrationBean;
 	}
 
