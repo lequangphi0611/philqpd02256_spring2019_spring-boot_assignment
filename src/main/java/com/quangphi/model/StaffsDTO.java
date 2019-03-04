@@ -52,7 +52,7 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 
 	private DepartmentDTO department;
 
-	private List<RecordsDTO> records;
+	private List<RecordsDTO> records = new ArrayList<RecordsDTO>();
 
 	public static StaffsDTO parseStaffsDTO(Staffs staffsEntity) {
 		StaffsDTO staffsDTO = new StaffsDTO();
@@ -66,12 +66,10 @@ public class StaffsDTO implements Comparable<StaffsDTO> {
 		staffsDTO.setSalary(staffsEntity.getSalary());
 		staffsDTO.setNotes(staffsEntity.getNotes());
 		staffsDTO.setDepartment(DepartmentDTO.parseDepartmentDTOWidthOutFetchStaffs(staffsEntity.getDepartment()));
-		List<RecordsDTO> records = new ArrayList<>();
 		staffsEntity.getRecords().forEach((recordsEntity) -> {
-			records.add(RecordsDTO.parseRecordsDTO(recordsEntity));
+			staffsDTO.getRecords().add(RecordsDTO.parseRecordsDTO(recordsEntity));
 		});
-		Collections.sort(records);
-		staffsDTO.setRecords(records);
+		Collections.sort(staffsDTO.getRecords());
 		return staffsDTO;
 	}
 
